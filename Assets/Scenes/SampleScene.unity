@@ -1288,6 +1288,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 06ef938d7fd427a48a2d8be37bc29394, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1510885332}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 06ef938d7fd427a48a2d8be37bc29394, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1510885334}
   m_SourcePrefab: {fileID: 100100000, guid: 06ef938d7fd427a48a2d8be37bc29394, type: 3}
 --- !u!1 &1510885331 stripped
 GameObject:
@@ -1308,6 +1311,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcName: Housewife
   dialogueLines: []
+--- !u!136 &1510885334
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510885331}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.18860747
+  m_Height: 1.8817308
+  m_Direction: 1
+  m_Center: {x: -0.0010862352, y: 0.8416964, z: -0.0093230605}
 --- !u!1001 &1628828225
 PrefabInstance:
   m_ObjectHideFlags: 0
