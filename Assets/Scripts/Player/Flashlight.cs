@@ -183,7 +183,7 @@ public class FlashlightController : MonoBehaviour
             float nx = (x + 0.5f) / size * 2f - 1f;
             float ny = (y + 0.5f) / size * 2f - 1f;
             float r = Mathf.Sqrt(nx * nx + ny * ny);
-            float v = Mathf.Clamp01(1f - Mathf.SmoothStep(0.70f, 1.00f, r));
+            float v = Mathf.Clamp01(1f - Mathf.SmoothStep(0.85f, 1.00f, r));
             tex.SetPixel(x, y, new Color(v, v, v, 1f));
         }
         tex.Apply(false, true);
