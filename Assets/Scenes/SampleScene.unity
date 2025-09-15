@@ -568,6 +568,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: GroundLayers.m_Bits
       value: 1
       objectReference: {fileID: 0}
@@ -631,7 +635,10 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      insertIndex: 1
+      insertIndex: 0
+      addedObject: {fileID: 1172147953}
+    - targetCorrespondingSourceObject: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      insertIndex: 2
       addedObject: {fileID: 1817409900}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
@@ -934,6 +941,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1172147953}
+  - component: {fileID: 1172147954}
   m_Layer: 0
   m_Name: flash
   m_TagString: Untagged
@@ -949,13 +957,56 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1172147952}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.56023, y: 0, z: 2.17129}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.17, y: 1.217, z: 0.512}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2013624296}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1172147954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172147952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbad5d356252c4c459c568b55f78f5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mountCamera: {fileID: 0}
+  localPosition: {x: 0, y: -0.1, z: 0.6}
+  localEuler: {x: 0, y: 0, z: 0}
+  toggleAction: {fileID: 0}
+  fallbackKey: 102
+  spotAngle: 75
+  innerSpotRatio: 0.85
+  range: 21
+  intensity: 200
+  color: {r: 1, g: 1, b: 1, a: 1}
+  shadows: 2
+  shadowStrength: 0.35
+  useCookie: 1
+  cookieSize: 350
+  autoDimNearSurface: 1
+  dimStartDistance: 1.2
+  dimEndDistance: 0.3
+  dimMinFactor: 0.25
+  dimMaxCheckDistance: 3.5
+  dimRayStartOffset: 0.05
+  useSphereCast: 0
+  sphereRadius: 0.05
+  surfaceMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  autoWiden: 1
+  widenStartDistance: 1.5
+  widenEndDistance: 0.25
+  maxWidenMultiplier: 1.6
+  conserveBrightness: 1
+  widenLerpSpeed: 10
 --- !u!1001 &1416105781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1322,6 +1373,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 06ef938d7fd427a48a2d8be37bc29394, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1510885334}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 06ef938d7fd427a48a2d8be37bc29394, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1510885336}
   m_SourcePrefab: {fileID: 100100000, guid: 06ef938d7fd427a48a2d8be37bc29394, type: 3}
 --- !u!1 &1510885331 stripped
 GameObject:
@@ -1365,6 +1419,32 @@ CapsuleCollider:
   m_Height: 1.8817308
   m_Direction: 1
   m_Center: {x: -0.0010862352, y: 0.8416964, z: -0.0093230605}
+--- !u!114 &1510885336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510885331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b4cd712ffb3c124c97595fc0cdd73ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  labelText: Press E to Talk
+  worldOffset: {x: 0, y: 1.8, z: 0}
+  playerCamera: {fileID: 919342269}
+  showDistance: 3
+  lookDotThreshold: 0.75
+  requireLineOfSight: 1
+  losMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  fadeSpeed: 8
+  textSize: 1
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  billboard: 1
+  clampUpright: 1
 --- !u!1001 &1628828225
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1647,4 +1727,3 @@ SceneRoots:
   - {fileID: 788499527}
   - {fileID: 60110194}
   - {fileID: 1416105781}
-  - {fileID: 1172147953}

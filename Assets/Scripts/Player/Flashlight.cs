@@ -14,16 +14,16 @@ public class FlashlightController : MonoBehaviour
 
     [Header("Beam Settings")]
     [SerializeField] private float spotAngle = 75f;
-    [SerializeField, Range(0f, 1f)] private float innerSpotRatio = 0.85f;
-    [SerializeField] private float range = 21f;
-    [SerializeField] private float intensity = 200f;
+    [SerializeField, Range(0f, 1f)] private float innerSpotRatio = 0.45f;
+    [SerializeField] private float range = 18f;
+    [SerializeField] private float intensity = 25f;
     [SerializeField] private Color color = Color.white;
     [SerializeField] private LightShadows shadows = LightShadows.Soft;
-    [SerializeField, Range(0f, 1f)] private float shadowStrength = 0.35f;
+    [SerializeField, Range(0f, 1f)] private float shadowStrength = 0.25f;
 
     [Header("Soft Edge (Cookie)")]
     [SerializeField] private bool useCookie = true;
-    [SerializeField, Range(64, 1024)] private int cookieSize = 350
+    [SerializeField, Range(64, 1024)] private int cookieSize = 555
     ;
 
     [Header("Auto-Dim (หรี่แสงเมื่อใกล้ผิว)")]
