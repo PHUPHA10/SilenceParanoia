@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour, IInteractable
 {
-    [SerializeField] string itemName = "Bottle";
+    [SerializeField] string itemName = "";
 
     public string Prompt => "Pick Up " + itemName;
 
