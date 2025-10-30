@@ -15,4 +15,12 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("Option");
     }
+    public void SaveAndGoToMain()
+    {
+        SceneManager.LoadScene("Start");
+    }
+        public void BackToMain()
+    {
+        SceneManager.LoadScene("Start");
+    }
 }
