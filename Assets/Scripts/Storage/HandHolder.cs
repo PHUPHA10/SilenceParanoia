@@ -5,8 +5,9 @@ public class HandHolder : MonoBehaviour
     public Transform rightHandAnchor;    // จุดยึด (ลูกของกล้อง/แขนผู้เล่น)
     private GameObject currentHeld;
 
-    void OnEnable()
+    void Start()
     {
+       
         HotbarModel.Instance.OnSelectionChanged += OnSelectChanged;
         Inventory.Instance.OnInventoryChanged += OnInventoryChanged;
         // sync ครั้งแรก
@@ -35,6 +36,7 @@ public class HandHolder : MonoBehaviour
             currentHeld = Instantiate(item.heldPrefab, rightHandAnchor);
             currentHeld.transform.localPosition = Vector3.zero;
             currentHeld.transform.localRotation = Quaternion.identity;
+            
         }
     }
     public void EquipItem(ItemDefinition def)
@@ -48,6 +50,7 @@ public class HandHolder : MonoBehaviour
     currentHeld.transform.localPosition = def.heldLocalPosition;
     currentHeld.transform.localRotation = Quaternion.Euler(def.heldLocalEuler);
     currentHeld.transform.localScale    = def.heldLocalScale;
-}
+        
+    }
 
 }

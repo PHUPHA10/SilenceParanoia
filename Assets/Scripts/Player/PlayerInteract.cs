@@ -16,6 +16,9 @@ public class PlayerInteract : MonoBehaviour
     private IInteractable current;
     private IInteractable last;
 
+    private OutlineItem currentoutlineitem ;
+    private OutlineItem lastoutlineitem;
+
     void Awake()
     {
         if (cam == null) cam = Camera.main;
@@ -54,18 +57,30 @@ public class PlayerInteract : MonoBehaviour
             current = hit.collider.GetComponent<IInteractable>()
                    ?? hit.collider.GetComponentInParent<IInteractable>();
 
+            currentoutlineitem = hit.collider.GetComponent<OutlineItem>()
+            ?? hit.collider.GetComponentInParent<OutlineItem>();    
+
             if (current != null && current != last)
             {
                 ShowPrompt(current.Prompt);
+
+            }
+            if (currentoutlineitem != null && currentoutlineitem != lastoutlineitem)
+            {
+                currentoutlineitem.SetOutlineScale(1.04f);
             }
         }
         else
         {
             current = null;
             HidePrompt();
+            currentoutlineitem?.SetOutlineScale(0);
+            currentoutlineitem = null;
         }
 
+
         last = current;
+        lastoutlineitem = currentoutlineitem;
     }
 
     private void ShowPrompt(string prompt)

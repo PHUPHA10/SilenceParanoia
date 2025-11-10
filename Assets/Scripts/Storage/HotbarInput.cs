@@ -10,6 +10,7 @@ public class HotbarInput : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
                 HotbarModel.Instance.SelectIndex(i);
+                Debug.Log("Work"+i);
             }
         }
 
@@ -17,5 +18,6 @@ public class HotbarInput : MonoBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll > 0f) HotbarModel.Instance.SelectNextFilled(-1); // ขึ้นบน = ย้อน
         else if (scroll < 0f) HotbarModel.Instance.SelectNextFilled(+1);
+        
     }
 }

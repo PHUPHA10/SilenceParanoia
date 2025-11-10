@@ -16,7 +16,7 @@ public class HotbarModel : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-
+        Debug.Log(Instance == null);
         if (hotbarSize < 1) hotbarSize = 5;
         if (mapInvIndex == null || mapInvIndex.Length != hotbarSize)
         {
