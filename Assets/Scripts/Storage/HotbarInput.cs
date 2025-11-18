@@ -10,7 +10,7 @@ public class HotbarInput : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
                 HotbarModel.Instance.SelectIndex(i);
-                Debug.Log("Work"+i);
+
             }
         }
 

@@ -38,12 +38,20 @@ public class PlayerInteract : MonoBehaviour
     {
         DetectInteractable();
 
+        // ปุ่ม E ปกติ
         if (current != null && interactAction != null && interactAction.action.WasPressedThisFrame())
         {
             current.Interact();
             HidePrompt();
         }
+
+        // ★ ปุ่ม Q สำหรับตาแมว
+        if (current is CateyeDoor cateye && Keyboard.current.qKey.wasPressedThisFrame)
+        {
+            cateye.ToggleCateye();
+        }
     }
+
 
     private void DetectInteractable()
     {
@@ -96,17 +104,24 @@ public class PlayerInteract : MonoBehaviour
 
         last = current;
         lastoutlineitem = currentoutlineitem;
+
     }
+
 
     private void ShowPrompt(string prompt)
     {
         if (promptLabel != null)
         {
-            // แก้เป็นภาษาอังกฤษ
-            promptLabel.text = $"Press E to {prompt}";
+            string keyText = "E";
+
+            if (current is CateyeDoor)
+                keyText = "Q";
+
+            promptLabel.text = $"Press {keyText} to {prompt}";
             promptLabel.enabled = true;
         }
     }
+
 
     private void HidePrompt()
     {
