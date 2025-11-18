@@ -6,32 +6,23 @@ public class OutlineItem : MonoBehaviour
 
     void Start()
     {
-        // ดึง materials ทั้งหมดจาก renderer (สำเนา instanced แล้ว)
+        // ดึงทุก material ของตัวนี้
         materials = GetComponent<Renderer>().materials;
+
+        // ปิดขอบตอนเริ่มเกม
+        SetOutline(false);
     }
 
-    void Update()
-    {
-        // กด Q เพื่อเปิด/ปิดขอบ
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SetOutlineScale(0f);
-        }
-        else if (Input.GetKeyUp(KeyCode.Q))
-        {
-            SetOutlineScale(1.04f);
-        }
-    }
-
-    public void SetOutlineScale(float value)
+    public void SetOutline(bool on)
     {
         if (materials == null) return;
 
-        // loop ทุก material แล้วตั้งค่าพร้อมกัน
         foreach (var mat in materials)
         {
-            if (mat.HasProperty("_outline_scale"))
-                mat.SetFloat("_outline_scale", value);
+            if (mat != null && mat.HasProperty("_outline_scale"))
+            {
+                mat.SetFloat("_outline_scale", on ? 1.04f : 0f);
+            }
         }
     }
 }

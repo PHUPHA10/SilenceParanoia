@@ -54,30 +54,45 @@ public class PlayerInteract : MonoBehaviour
 
         if (hitSomething)
         {
+            // หา IInteractable
             current = hit.collider.GetComponent<IInteractable>()
                    ?? hit.collider.GetComponentInParent<IInteractable>();
 
+            // หา OutlineItem
             currentoutlineitem = hit.collider.GetComponent<OutlineItem>()
-            ?? hit.collider.GetComponentInParent<OutlineItem>();    
+                                ?? hit.collider.GetComponentInParent<OutlineItem>();
 
+            // เปลี่ยนข้อความกด E เฉพาะตอนเปลี่ยน Target
             if (current != null && current != last)
             {
                 ShowPrompt(current.Prompt);
-
             }
-            if (currentoutlineitem != null && currentoutlineitem != lastoutlineitem)
+
+            // ✅ ส่วนที่แก้: จัดการเปิด/ปิดขอบให้ถูก
+            if (currentoutlineitem != lastoutlineitem)
             {
-                currentoutlineitem.SetOutlineScale(1.04f);
+                // ปิดขอบอันเก่า
+                if (lastoutlineitem != null)
+                    lastoutlineitem.SetOutline(false);
+
+                // เปิดขอบอันใหม่ (ถ้ามี)
+                if (currentoutlineitem != null)
+                    currentoutlineitem.SetOutline(true);
             }
         }
         else
         {
+            // ไม่โดนอะไรเลย
             current = null;
             HidePrompt();
-            currentoutlineitem?.SetOutlineScale(0);
-            currentoutlineitem = null;
-        }
 
+            // ปิดขอบของอันสุดท้ายที่เคยไฮไลต์ไว้
+            if (lastoutlineitem != null)
+                lastoutlineitem.SetOutline(false);
+
+            currentoutlineitem = null;
+            lastoutlineitem = null;
+        }
 
         last = current;
         lastoutlineitem = currentoutlineitem;
@@ -101,4 +116,5 @@ public class PlayerInteract : MonoBehaviour
             promptLabel.enabled = false;
         }
     }
+
 }
