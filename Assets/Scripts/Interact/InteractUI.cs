@@ -9,6 +9,7 @@ public class InteractUI : MonoBehaviour
     public void Show(string prompt)
     {
         // แสดงเป็น "กด E เพื่อ {Prompt}"
+        Debug.Log("Kuy");
         promptText.text = $"Press E to {prompt}";
         promptText.enabled = true;
     }

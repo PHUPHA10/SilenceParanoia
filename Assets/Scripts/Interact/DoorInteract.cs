@@ -1,32 +1,49 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class DoorInteract : MonoBehaviour, IInteractable
 {
     [Header("Door Info")]
-    [SerializeField] private string itemName = "";
-    [SerializeField] private ItemDefinition itemData;   // เชื่อม ScriptableObject ของไอเท็ม
     [SerializeField] private Animator Door;
 
-    private bool IsOpen;
-    public string Prompt => "Pick Up " + (string.IsNullOrEmpty(itemName) ? itemData?.displayName : itemName);
+    [Header("Animation Durations (seconds)")]
+    [SerializeField] private float openDuration = 1.0f;   // ความยาวอนิเมชั่นเปิด
+    [SerializeField] private float closeDuration = 1.0f;  // ความยาวอนิเมชั่นปิด
+
+    private bool isOpen = false;
+    private bool isAnimating = false;  // กันกดซ้ำระหว่างเล่นอนิเมชั่น
+
+    public string Prompt => isOpen ? "Close Door" : "Open Door";
 
     public void Interact()
     {
-        if (itemData == null)
+        // ถ้าอนิเมชั่นกำลังเล่นอยู่ ห้ามกดซ้ำ
+        if (isAnimating) return;
+
+        if (isOpen)
         {
-            Debug.LogWarning($"Pickup '{gameObject.name}' has no ItemDefinition assigned!");
-            Destroy(gameObject);
-            return;
-        }
-        if (IsOpen)
-        {
+            // เล่นอนิเมชั่นปิด
             Door.SetTrigger("Close");
-            IsOpen = false;
+            StartCoroutine(DoorRoutine(false));
+            isOpen = false;
         }
         else
         {
+            // เล่นอนิเมชั่นเปิด
             Door.SetTrigger("Open");
-            IsOpen = true;
+            StartCoroutine(DoorRoutine(true));
+            isOpen = true;
         }
+    }
+
+    private IEnumerator DoorRoutine(bool opening)
+    {
+        isAnimating = true;
+
+        // รอเวลาเท่าความยาวคลิป (ตั้งค่าใน Inspector)
+        float waitTime = opening ? openDuration : closeDuration;
+        yield return new WaitForSeconds(waitTime);
+
+        isAnimating = false;
     }
 }

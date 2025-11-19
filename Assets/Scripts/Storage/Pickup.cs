@@ -7,7 +7,11 @@ public class Pickup : MonoBehaviour, IInteractable
     [SerializeField] private ItemDefinition itemData;   // เชื่อม ScriptableObject ของไอเท็ม
     [SerializeField] private int amount = 1;
 
-    public string Prompt => "Pick Up " + (string.IsNullOrEmpty(itemName) ? itemData?.displayName : itemName);
+    public string Prompt =>
+
+        "Pick Up " + (string.IsNullOrEmpty(itemName) ?
+        itemData?.displayName :
+        itemName);
 
     public void Interact()
     {

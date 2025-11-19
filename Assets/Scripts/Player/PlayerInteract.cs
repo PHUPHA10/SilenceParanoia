@@ -80,6 +80,7 @@ public class PlayerInteract : MonoBehaviour
             if (currentoutlineitem != lastoutlineitem)
             {
                 // ปิดขอบอันเก่า
+                Debug.Log("Hee");
                 if (lastoutlineitem != null)
                     lastoutlineitem.SetOutline(false);
 

@@ -15,6 +15,7 @@ public class OutlineItem : MonoBehaviour
 
     public void SetOutline(bool on)
     {
+
         if (materials == null) return;
 
         foreach (var mat in materials)

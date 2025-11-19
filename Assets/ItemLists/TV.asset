@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bca32116737f3b4a97a338911be0f3c, type: 3}
-  m_Name: Door
+  m_Name: TV
   m_EditorClassIdentifier: 
-  displayName: Door
+  displayName: TV
   icon: {fileID: 0}
   maxStack: 1
-  heldPrefab: {fileID: 7058382853933664587, guid: a6ab2c540abbc7d45a9df18113998455, type: 3}
+  heldPrefab: {fileID: -5983532798112357502, guid: 6a16bcfce4e114041a66915082038416, type: 3}
   heldLocalPosition: {x: 0.38, y: -0.38, z: 0.72}
   heldLocalEuler: {x: 8, y: 0, z: 0}
   heldLocalScale: {x: 1, y: 1, z: 1}
