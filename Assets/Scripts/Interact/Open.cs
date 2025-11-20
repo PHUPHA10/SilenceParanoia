@@ -2,10 +2,10 @@
 
 public class Open : MonoBehaviour, IInteractable
 {
-    [Header("Pickup Info")]
+    [Header("Open Info")]
     [SerializeField] private string itemName = "";
     [SerializeField] private ItemDefinition itemData;   // เชื่อม ScriptableObject ของไอเท็ม
-    [SerializeField] private int amount = 1;
+    [SerializeField] private int amount = 0;
 
     public string Prompt =>
 

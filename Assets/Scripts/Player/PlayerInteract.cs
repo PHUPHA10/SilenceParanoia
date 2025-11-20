@@ -50,6 +50,12 @@ public class PlayerInteract : MonoBehaviour
         {
             cateye.ToggleCateye();
         }
+
+    }
+    public void RefreshPrompt(IInteractable interactable)
+    {
+        // ใช้ข้อความ Prompt ล่าสุดจาก object นั้น
+        ShowPrompt(interactable.Prompt);
     }
 
 
@@ -80,7 +86,7 @@ public class PlayerInteract : MonoBehaviour
             if (currentoutlineitem != lastoutlineitem)
             {
                 // ปิดขอบอันเก่า
-                Debug.Log("Hee");
+
                 if (lastoutlineitem != null)
                     lastoutlineitem.SetOutline(false);
 
