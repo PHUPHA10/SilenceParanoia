@@ -777,8 +777,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b0c4b5298a9afd041bf7ed7e581dfb1c, type: 2}
+  m_sharedMaterial: {fileID: 8516931772478999945, guid: b0c4b5298a9afd041bf7ed7e581dfb1c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1598,8 +1598,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b0c4b5298a9afd041bf7ed7e581dfb1c, type: 2}
+  m_sharedMaterial: {fileID: 8516931772478999945, guid: b0c4b5298a9afd041bf7ed7e581dfb1c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1623,8 +1623,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2620,7 +2620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f7484c0005d1e4bb62f37a5bb95067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcName: Housewife
+  npcName: "\u0E41\u0E21\u0E48\u0E1A\u0E49\u0E32\u0E19"
   dialogueLines: []
   usePerLineDurations: 0
   secondsPerLine: 2.5
@@ -3637,6 +3637,10 @@ PrefabInstance:
       propertyPath: itemData
       value: 
       objectReference: {fileID: 11400000, guid: 33037248257ccd249856115b70f5eed2, type: 2}
+    - target: {fileID: 2368336181008050370, guid: 08ad25e23b47cbf46b078ba615f906e1, type: 3}
+      propertyPath: itemName
+      value: "\u0E01\u0E38\u0E0D\u0E41\u0E08"
+      objectReference: {fileID: 0}
     - target: {fileID: 4131435106415177729, guid: 08ad25e23b47cbf46b078ba615f906e1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.428
@@ -3778,6 +3782,10 @@ PrefabInstance:
       propertyPath: itemData
       value: 
       objectReference: {fileID: 11400000, guid: ea027afb22ea005418c71556ca975d50, type: 2}
+    - target: {fileID: 7989310154544671277, guid: 786219cde5dc2ae4e9fd39a41f10c578, type: 3}
+      propertyPath: itemName
+      value: "\u0E02\u0E27\u0E14\u0E19\u0E49\u0E33"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

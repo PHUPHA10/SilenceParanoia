@@ -124,7 +124,7 @@ public class PlayerInteract : MonoBehaviour
             if (current is CateyeDoor)
                 keyText = "Q";
 
-            promptLabel.text = $"Press {keyText} to {prompt}";
+            promptLabel.text = $"กด {keyText} เพื่อ {prompt}";
             promptLabel.enabled = true;
         }
     }

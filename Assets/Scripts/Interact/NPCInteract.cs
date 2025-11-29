@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class NPCInteract : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string npcName = "Housewife";
+    [SerializeField] private string npcName = "แม่บ้าน";
 
 
     // กำหนดบทพูด (string ธรรมดา)
@@ -12,7 +12,7 @@ public class NPCInteract : MonoBehaviour, IInteractable
     // เลือกว่าจะใช้เวลาเท่ากันทุกบรรทัด หรือกำหนดเวลาต่อบรรทัด
     [Header("Timing")]
     [SerializeField] private bool usePerLineDurations = false;
-    [SerializeField] private float secondsPerLine = 2.5f;
+    [SerializeField] private float secondsPerLine = 3.8f;
     [SerializeField] private float[] perLineDurations; // ต้องมีขนาดเท่ากับ dialogueLines
 
     public string Prompt => $"Talk to {npcName}";
@@ -32,9 +32,9 @@ public class NPCInteract : MonoBehaviour, IInteractable
             DialogueManager.Instance.StartDialogue(npcName, dialogueLines, secondsPerLine);
         }
         dialogueLines = new string[] {
-            "Hello dear, did you have lunch yet?",
-            "Be careful, it's getting dark outside.",
-            "Don't forget to bring your flashlight."
+            "เป็นไงบ้างจ๊ะหนู   กินข้าวเย็นมารึยัง?",
+            "ระวังตัวด้วยนะจ๊ะ   ช่วงนี้มีแต่ข่าวปล้นชิงทรัพย์เยอะไปหมด",
+            "คอยดูรอบข้างตัวเองไว้ดีๆนะ"
 };
     }
     

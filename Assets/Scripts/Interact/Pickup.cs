@@ -9,7 +9,7 @@ public class Pickup : MonoBehaviour, IInteractable
 
     public string Prompt =>
 
-        "Pick Up " + (string.IsNullOrEmpty(itemName) ?
+        "เก็บ " + (string.IsNullOrEmpty(itemName) ?
         itemData?.displayName :
         itemName);
 
@@ -17,7 +17,7 @@ public class Pickup : MonoBehaviour, IInteractable
     {
         if (itemData == null)
         {
-            Debug.LogWarning($"Pickup '{gameObject.name}' has no ItemDefinition assigned!");
+            Debug.LogWarning($"เก็บ '{gameObject.name}' has no ItemDefinition assigned!");
             Destroy(gameObject);
             return;
         }
@@ -26,7 +26,7 @@ public class Pickup : MonoBehaviour, IInteractable
         int added = Inventory.Instance?.Add(itemData, amount) ?? 0;
         if (added > 0)
         {
-            Debug.Log($"Picked up {added}x {itemData.displayName}");
+            Debug.Log($"เก็บ {added}x {itemData.displayName}");
             Destroy(gameObject);
         }
         else
