@@ -15,7 +15,7 @@ public class NPCInteract : MonoBehaviour, IInteractable
     [SerializeField] private float secondsPerLine = 3.8f;
     [SerializeField] private float[] perLineDurations; // ต้องมีขนาดเท่ากับ dialogueLines
 
-    public string Prompt => $"Talk to {npcName}";
+    public string Prompt => $"คุยกับ {npcName}";
 
     public void Interact()
     {
