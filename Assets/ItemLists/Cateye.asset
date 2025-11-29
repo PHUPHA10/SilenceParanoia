@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bca32116737f3b4a97a338911be0f3c, type: 3}
   m_Name: Cateye
   m_EditorClassIdentifier: 
-  displayName: 
+  displayName: "\u0E15\u0E32\u0E41\u0E21\u0E27"
   icon: {fileID: 0}
   maxStack: 1
   heldPrefab: {fileID: 0}

@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bca32116737f3b4a97a338911be0f3c, type: 3}
   m_Name: Key
   m_EditorClassIdentifier: 
-  displayName: Key
+  displayName: "\u0E01\u0E38\u0E0D\u0E41\u0E08"
   icon: {fileID: 0}
   maxStack: 2
   heldPrefab: {fileID: 7729571075536144147, guid: 08ad25e23b47cbf46b078ba615f906e1, type: 3}
+  heldLocalPosition: {x: 0.38, y: -0.38, z: 0.72}
+  heldLocalEuler: {x: 8, y: 0, z: 0}
+  heldLocalScale: {x: 1, y: 1, z: 1}

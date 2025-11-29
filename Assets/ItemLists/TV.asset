@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bca32116737f3b4a97a338911be0f3c, type: 3}
   m_Name: TV
   m_EditorClassIdentifier: 
-  displayName: TV
+  displayName: "\u0E42\u0E17\u0E23\u0E17\u0E31\u0E28\u0E19\u0E4C"
   icon: {fileID: 0}
   maxStack: 1
   heldPrefab: {fileID: -5983532798112357502, guid: 6a16bcfce4e114041a66915082038416, type: 3}

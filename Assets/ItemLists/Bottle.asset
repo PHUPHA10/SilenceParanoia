@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bca32116737f3b4a97a338911be0f3c, type: 3}
   m_Name: Bottle
   m_EditorClassIdentifier: 
-  displayName: Bottle
+  displayName: "\u0E02\u0E27\u0E14\u0E19\u0E49\u0E33"
   icon: {fileID: 0}
   maxStack: 3
   heldPrefab: {fileID: 5788978618034868497, guid: 786219cde5dc2ae4e9fd39a41f10c578, type: 3}
