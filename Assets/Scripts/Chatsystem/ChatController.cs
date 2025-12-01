@@ -1,3 +1,4 @@
+using StarterAssets;
 using UnityEngine;
 
 public class ChatOverlayController : MonoBehaviour
@@ -12,6 +13,7 @@ public class ChatOverlayController : MonoBehaviour
     CateyeDoor cateyeDoor;
     FlashlightController flashlightController;
     HotbarInput hotBar;
+    FirstPersonController firstPersonController;
 
     void Start()
     {
@@ -23,6 +25,7 @@ public class ChatOverlayController : MonoBehaviour
         cateyeDoor = FindObjectOfType<CateyeDoor>();
         flashlightController = FindObjectOfType<FlashlightController>();
         hotBar = FindObjectOfType<HotbarInput>();
+        firstPersonController = FindAnyObjectByType<FirstPersonController>();
     }
 
     void Update()
@@ -45,8 +48,7 @@ public class ChatOverlayController : MonoBehaviour
         if (cateyeDoor != null) cateyeDoor.enabled = !IsChatOpen;
         if (flashlightController != null) flashlightController.enabled = !IsChatOpen;
         if (hotBar != null) hotBar.enabled = !IsChatOpen;
-
-        // ? ??????? FirstPersonController ???? StarterAssetsInputs
-        // ?????????????????????? + ?????????
+        if (firstPersonController != null) firstPersonController.enabled = !IsChatOpen;
     }
+
 }

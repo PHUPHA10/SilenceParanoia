@@ -1,3 +1,4 @@
+using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,36 +7,49 @@ public class PhoneChat : MonoBehaviour
     [Header("UI")]
     public GameObject phoneChatRoot;
 
-    [Header("Disable these when chat is open")]
-    public MonoBehaviour[] componentsToDisable;
+    public static bool IsChatOpen { get; private set; }
 
-    bool isOpen = false;
+    PlayerInteract playerInteract;
+    CateyeDoor cateyeDoor;
+    FlashlightController flashlightController;
+    HotbarInput hotBar;
+    FirstPersonController firstPersonController;
 
     void Start()
     {
-        phoneChatRoot.SetActive(false);
+        if (phoneChatRoot != null)
+            phoneChatRoot.SetActive(false);
+
+        playerInteract = FindObjectOfType<PlayerInteract>();
+        cateyeDoor = FindObjectOfType<CateyeDoor>();
+        flashlightController = FindObjectOfType<FlashlightController>();
+        hotBar = FindObjectOfType<HotbarInput>();
+        firstPersonController = FindAnyObjectByType<FirstPersonController>();
     }
 
     void Update()
     {
         if (Keyboard.current.mKey.wasPressedThisFrame)
         {
+            // ?? ?????????????? ????????????? ? ??????????
+            if (IsChatOpen && ChatInputFocus.IsAnyInputFocused)
+                return;
+
             ToggleChat();
         }
     }
 
     void ToggleChat()
     {
-        isOpen = !isOpen;
-        phoneChatRoot.SetActive(isOpen);
+        IsChatOpen = !IsChatOpen;
 
-        foreach (var comp in componentsToDisable)
-        {
-            if (comp != null)
-                comp.enabled = !isOpen;
-        }
+        if (phoneChatRoot != null)
+            phoneChatRoot.SetActive(IsChatOpen);
 
-        Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = isOpen;
+        if (playerInteract != null) playerInteract.enabled = !IsChatOpen;
+        if (cateyeDoor != null) cateyeDoor.enabled = !IsChatOpen;
+        if (flashlightController != null) flashlightController.enabled = !IsChatOpen;
+        if (hotBar != null) hotBar.enabled = !IsChatOpen;
+        if (firstPersonController != null) firstPersonController.enabled = !IsChatOpen;
     }
 }
