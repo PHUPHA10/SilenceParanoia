@@ -31,7 +31,7 @@ public class Pickup : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.Log("Inventory full or cannot pick up item.");
+
         }
     }
 }
