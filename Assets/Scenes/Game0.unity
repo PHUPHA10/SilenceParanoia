@@ -1762,16 +1762,16 @@ MonoBehaviour:
   - {fileID: 933163391}
   - {fileID: 1778861327}
   walkSpeed: 2
-  chaseSpeed: 4
-  minIdleTime: 0
-  maxIdleTime: 0
+  chaseSpeed: 5.5
+  minIdleTime: 2
+  maxIdleTime: 9
   idleTime: 0
-  sightDistance: 0
-  catchDistance: 0
+  sightDistance: 8
+  catchDistance: 1.5
   walking: 0
   chasing: 0
   player: {fileID: 631802567}
-  rayCastOffset: {x: 0, y: 0, z: 0}
+  rayCastOffset: {x: 0, y: 0.4, z: 0}
 --- !u!65 &166835109
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6024,6 +6024,7 @@ GameObject:
   - component: {fileID: 719054730}
   - component: {fileID: 719054729}
   - component: {fileID: 719054728}
+  - component: {fileID: 719054732}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -6121,6 +6122,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &719054732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719054727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 5651b2ab4f4b1e7419307cc880b9ec60, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &726854495
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -6,81 +5,101 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent ai;
+    public Transform player;
     public List<Transform> destinations;
 
-    public float walkSpeed, chaseSpeed, minIdleTime, maxIdleTime, idleTime, sightDistance, catchDistance;
-    public bool walking, chasing;
-    public Transform player;
+    public float walkSpeed = 2f;
+    public float chaseSpeed = 5f;
+    public float sightDistance = 10f;
+    public float catchDistance = 1.5f;
+    public Vector3 rayCastOffset = new Vector3(0, 1.5f, 0);
+
+    bool walking = true;
+    bool chasing = false;
 
     Transform currentDest;
-    Vector3 dest;
-
     int randNum;
-
-    public Vector3 rayCastOffset;
 
     void Start()
     {
+        if (destinations.Count > 0)
+        {
+            randNum = Random.Range(0, destinations.Count);
+            currentDest = destinations[randNum];
+        }
         walking = true;
-        randNum = Random.Range(0, destinations.Count);
-        currentDest = destinations[randNum];
+        chasing = false;
     }
 
     void Update()
     {
-        // ????????????????????????????
-        Vector3 direction = (player.position - transform.position).normalized;
-        RaycastHit hit;
+        HandleVision();
 
-        if (Physics.Raycast(transform.position + rayCastOffset, direction, out hit, sightDistance))
-        {
-            if (hit.collider.gameObject.tag == "Player")
-            {
-                walking = false;
-                StopCoroutine("stayIdle");
-                chasing = true;
-            }
-        }
-
-        // ??????????
         if (chasing)
         {
-            dest = player.position;
-            ai.destination = dest;
-            ai.speed = chaseSpeed;
-
-            float distance = Vector3.Distance(player.position, ai.transform.position);
-            if (distance <= catchDistance)
-            {
-                Debug.Log("Player caught!"); // ?????????
-                chasing = false;
-            }
+            ChasePlayer();
         }
-
-        // ??????????????
-        if (walking)
+        else if (walking)
         {
-            dest = currentDest.position;
-            ai.destination = dest;
-            ai.speed = walkSpeed;
+            Patrol();
+        }
+    }
 
-            if (ai.remainingDistance <= ai.stoppingDistance)
+    void HandleVision()
+    {
+        if (player == null) return;
+
+        Vector3 origin = transform.position + rayCastOffset;
+        Vector3 dir = (player.position - origin).normalized;
+
+        Debug.DrawRay(origin, dir * sightDistance, Color.red);
+
+        RaycastHit hit;
+        if (Physics.Raycast(origin, dir, out hit, sightDistance))
+        {
+            Debug.Log("Enemy ray hit: " + hit.collider.name);
+
+            if (hit.collider.CompareTag("Player"))
             {
-                ai.speed = 0;
-                StopCoroutine("stayIdle");
-                StartCoroutine(stayIdle());
+                if (!chasing)
+                    Debug.Log(">>> SWITCH TO CHASE <<<");
+
+                chasing = true;
                 walking = false;
+                ai.speed = chaseSpeed;
             }
         }
     }
 
-    IEnumerator stayIdle()
+    void ChasePlayer()
     {
-        idleTime = Random.Range(minIdleTime, maxIdleTime);
-        yield return new WaitForSeconds(idleTime);
+        if (player == null) return;
 
-        walking = true;
-        randNum = Random.Range(0, destinations.Count);
-        currentDest = destinations[randNum];
+        ai.destination = player.position;
+
+        float distance = Vector3.Distance(player.position, ai.transform.position);
+        if (distance <= catchDistance)
+        {
+            Debug.Log("Caught player (test mode)");
+            // ????????????? ????????????????????????????
+            chasing = false;
+            walking = false;
+            ai.isStopped = true;
+        }
+    }
+
+    void Patrol()
+    {
+        if (currentDest == null) return;
+
+        ai.speed = walkSpeed;
+        ai.destination = currentDest.position;
+
+        if (!ai.pathPending && ai.remainingDistance <= ai.stoppingDistance)
+        {
+            // ????????????
+            randNum = Random.Range(0, destinations.Count);
+            currentDest = destinations[randNum];
+        }
     }
 }
