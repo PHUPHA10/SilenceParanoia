@@ -1,42 +1,41 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class CateyeDoor : MonoBehaviour, IInteractable
+public class hidingPlace : MonoBehaviour, IInteractable
 {
     [Header("Camera Switching")]
-    public Camera playerCamera;      
-    public Camera cateyeCamera;      
+    public Camera playerCamera;
+    public Camera hideCamera;
 
-    [Header("Effects (Optional)")]
-    public Volume cateyeVolume;      
 
     [Header("Player Control ()")]
     public MonoBehaviour[] componentsToDisable;
     // ??? FirstPersonController, StarterAssetsInputs, PlayerInteract 
 
-    private bool isLooking = false;
+    private bool isHiding = false;
 
     public string Prompt =>
-        isLooking ? "stop checking outside "
-                  : "check outside the room ";
+        isHiding ? " Exit "
+                  : " Hide ";
 
     void Start()
     {
-        if (cateyeCamera != null)
-            cateyeCamera.enabled = false;
+        if (hideCamera != null)
+            hideCamera.enabled = false;
 
-        if (cateyeVolume != null)
-            cateyeVolume.enabled = false;
     }
 
-    public void Interact() { }
-
-    public void ToggleCateye()
+    public void Interact() 
     {
-        if (!isLooking)
-            Enter();
+        ToggleHide();
+    }
+
+    public void ToggleHide()
+    {
+        if (!isHiding)
+            Enter2();
         else
-            Exit();
+            Exit2();
 
         //PlayerInteract 
         var playerInteract = FindObjectOfType<PlayerInteract>();
@@ -46,13 +45,12 @@ public class CateyeDoor : MonoBehaviour, IInteractable
         }
     }
 
-    private void Enter()
+    private void Enter2()
     {
-        isLooking = true;
+        isHiding = true;
 
         if (playerCamera != null) playerCamera.enabled = false;
-        if (cateyeCamera != null) cateyeCamera.enabled = true;
-        if (cateyeVolume != null) cateyeVolume.enabled = true;
+        if (hideCamera != null) hideCamera.enabled = true;
 
 
         if (componentsToDisable != null)
@@ -65,13 +63,12 @@ public class CateyeDoor : MonoBehaviour, IInteractable
         Cursor.visible = false;
     }
 
-    private void Exit()
+    private void Exit2()
     {
-        isLooking = false;
+        isHiding = false;
 
-        if (cateyeCamera != null) cateyeCamera.enabled = false;
+        if (hideCamera != null) hideCamera.enabled = false;
         if (playerCamera != null) playerCamera.enabled = true;
-        if (cateyeVolume != null) cateyeVolume.enabled = false;
 
         if (componentsToDisable != null)
         {

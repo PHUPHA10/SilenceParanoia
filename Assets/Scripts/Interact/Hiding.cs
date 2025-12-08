@@ -1,15 +1,15 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Watch : MonoBehaviour
+public class Hiding : MonoBehaviour
 {
-    [Header("Watch Info")]
+    [Header("Hide Info")]
     [SerializeField] private string itemName = "";
-    [SerializeField] private ItemDefinition itemData;  
+    [SerializeField] private ItemDefinition itemData; 
     [SerializeField] private int amount = 0;
 
     public string Prompt =>
 
-        "????????" + (string.IsNullOrEmpty(itemName) ?
+        " ซ่อน " + (string.IsNullOrEmpty(itemName) ?
         itemData?.displayName :
         itemName);
 

@@ -121,7 +121,7 @@ public class PlayerInteract : MonoBehaviour
         {
             string keyText = "E";
 
-            if (current is CateyeDoor)
+            if (current is CateyeDoor )
                 keyText = "Q";
 
             promptLabel.text = $"กด {keyText} เพื่อ {prompt}";

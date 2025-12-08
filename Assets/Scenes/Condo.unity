@@ -5372,6 +5372,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cateye
       objectReference: {fileID: 0}
+    - target: {fileID: 4086922067172857422, guid: 33d02d59f89bb184793a1962c2fd3a04, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
