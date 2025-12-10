@@ -1,4 +1,3 @@
-// File: DialogueManagerSimple.cs
 using System.Collections;
 using UnityEngine;
 using TMPro;
@@ -14,6 +13,7 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Timing (seconds)")]
     [SerializeField] private float defaultSecondsPerLine = 2.5f;
+    public MonoBehaviour[] componentsToDisable;
 
     string speaker;
     string[] lines;
@@ -72,6 +72,8 @@ public class DialogueManager : MonoBehaviour
         perLineDurations = durationsPerLine;
 
         BeginAndRun();
+
+
     }
 
     void BeginAndRun()
@@ -85,6 +87,17 @@ public class DialogueManager : MonoBehaviour
 
         if (runCo != null) StopCoroutine(runCo);
         runCo = StartCoroutine(RunRoutine());
+
+        var playerInteract = FindObjectOfType<PlayerInteract>();
+        if (playerInteract != null)
+        {
+            // ซ่อน Prompt ตอนเริ่มคุย (ถ้าอยากให้หายทันที)
+            playerInteract.HidePrompt();   // ถ้าเมทอดนี้ยังเป็น private ให้เปลี่ยนเป็น public ก่อน
+
+            // ปิดการทำงานของ PlayerInteract ชั่วคราว
+            playerInteract.enabled = false;
+        }
+
     }
 
     IEnumerator RunRoutine()
@@ -123,5 +136,12 @@ public class DialogueManager : MonoBehaviour
     {
         StopCurrent();
         lines = null; perLineDurations = null; speaker = null;
+
+        var playerInteract = FindObjectOfType<PlayerInteract>();
+        if (playerInteract != null)
+        {
+            playerInteract.enabled = true;
+        }
+
     }
 }

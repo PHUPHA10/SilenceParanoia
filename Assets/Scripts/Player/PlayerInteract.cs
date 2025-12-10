@@ -19,6 +19,9 @@ public class PlayerInteract : MonoBehaviour
     private OutlineItem currentoutlineitem ;
     private OutlineItem lastoutlineitem;
 
+    public static bool IsInDialogue = false;
+
+
     void Awake()
     {
         if (cam == null) cam = Camera.main;
@@ -36,16 +39,21 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
+        if (IsInDialogue)
+        {
+            HidePrompt();
+            return;  // ❗ ห้าม interact ตอนอยู่ในบทสนทนา
+        }
+
         DetectInteractable();
 
-        // ปุ่ม E ปกติ
         if (current != null && interactAction != null && interactAction.action.WasPressedThisFrame())
         {
             current.Interact();
             HidePrompt();
         }
 
-        // ★ ปุ่ม Q สำหรับตาแมว
+        // ปุ่ม Q สำหรับตาแมว
         if (current is CateyeDoor cateye && Keyboard.current.qKey.wasPressedThisFrame)
         {
             cateye.ToggleCateye();
@@ -130,7 +138,7 @@ public class PlayerInteract : MonoBehaviour
     }
 
 
-    private void HidePrompt()
+    public void HidePrompt()
     {
         if (promptLabel != null)
         {

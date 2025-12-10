@@ -96,7 +96,7 @@ public class EnemyAI : MonoBehaviour
         float distance = Vector3.Distance(player.position, ai.transform.position);
         if (distance <= catchDistance)
         {
-            Debug.Log("Caught player (test mode)");
+
             chasing = false;
             walking = false;
             ai.isStopped = true;
