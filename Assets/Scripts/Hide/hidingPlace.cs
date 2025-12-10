@@ -14,7 +14,7 @@ public class hidingPlace : MonoBehaviour, IInteractable
     public MonoBehaviour[] componentsToDisable;
 
     private bool isHiding = false;
-
+    public bool IsHiding => isHiding;
     public string Prompt =>
         isHiding ? " Exit "
                  : " Hide ";
