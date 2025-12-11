@@ -3026,6 +3026,7 @@ GameObject:
   - component: {fileID: 276579179}
   - component: {fileID: 276579180}
   - component: {fileID: 276579181}
+  - component: {fileID: 276579182}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3102,11 +3103,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notificationUI: {fileID: 1951839903}
-  delayTime: 10
+  delayTime: 4
   moveSpeed: 300
   pointA: {fileID: 1951839903}
   pointB: {fileID: 1013186331}
   chatPanel: {fileID: 1042514117}
+--- !u!114 &276579182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276579176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25455538e1763a64187ca2bde3d4354c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideSpot: {fileID: 1412045641}
+  qteRoot: {fileID: 1013159191}
+  showDelay: 5
 --- !u!1 &278239912
 GameObject:
   m_ObjectHideFlags: 0
@@ -6581,7 +6597,7 @@ RectTransform:
   m_GameObject: {fileID: 662819978}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.9375, y: 1, z: 1}
+  m_LocalScale: {x: 1.1867963, y: 0.52504, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1013159195}
@@ -9745,7 +9761,7 @@ RectTransform:
   m_GameObject: {fileID: 1002650295}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.0783, y: 2.0783, z: 2.0783}
+  m_LocalScale: {x: 1.3601685, y: 1.3601685, z: 1.3601685}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1013159195}
@@ -9808,7 +9824,11 @@ MonoBehaviour:
   pointA: {fileID: 1995860205}
   pointB: {fileID: 390312944}
   safeZone: {fileID: 662819979}
-  moveSpeed: 400
+  moveSpeed: 750
+  maxFails: 3
+  qteRoot: {fileID: 1013159191}
+  enemyAI: {fileID: 166835108}
+  hidingTarget: {fileID: 171384386}
 --- !u!1 &1013159191
 GameObject:
   m_ObjectHideFlags: 0
@@ -10516,6 +10536,7 @@ GameObject:
   - component: {fileID: 1042514119}
   - component: {fileID: 1042514118}
   - component: {fileID: 1042514122}
+  - component: {fileID: 1042514123}
   m_Layer: 5
   m_Name: CanvasChat
   m_TagString: Untagged
@@ -10626,6 +10647,20 @@ MonoBehaviour:
   profileImages:
   - {fileID: 1691694300}
   - {fileID: 875940859}
+--- !u!114 &1042514123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042514117}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69d58ed5d8df5fd42b588dab0b72e972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatRoot: {fileID: 1042514117}
+  toggleKey: 109
 --- !u!1 &1048700016
 GameObject:
   m_ObjectHideFlags: 0
@@ -13048,7 +13083,7 @@ RectTransform:
   m_GameObject: {fileID: 1295110984}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 14.35, y: 1, z: 1}
+  m_LocalScale: {x: 14.35, y: 0.50001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1013159195}

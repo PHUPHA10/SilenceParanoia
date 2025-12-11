@@ -2,39 +2,57 @@ using UnityEngine;
 
 public class PointerController : MonoBehaviour
 {
-    public Transform pointA; // Reference to the starting point
-    public Transform pointB; // Reference to the ending point
-    public RectTransform safeZone; // Reference to the safe zone RectTransform
-    public float moveSpeed = 100f; // Speed of the pointer movement
+    [Header("Pointer Move")]
+    public Transform pointA;              // ????????
+    public Transform pointB;              // ???????
+    public RectTransform safeZone;        // ??????????
+    public float moveSpeed = 100f;        // ???????? pointer
 
-    private float direction = 1f; // 1 for moving towards B, -1 for moving towards A
+    [Header("QTE Logic")]
+    public int maxFails = 3;              // ???????????????
+    public GameObject qteRoot;            // Root UI ??? QTE (Panel ??????? pointer + bar)
+    public EnemyAI enemyAI;               // ?????????????????? Inspector
+
+    [Header("Hiding Target")]
+    public Transform hidingTarget;        // ??????????????????????? (???? ?????????? / ???????)
+
     private RectTransform pointerTransform;
     private Vector3 targetPosition;
+    private int failCount = 0;
+    private bool qteActive = true;
 
     void Start()
     {
         pointerTransform = GetComponent<RectTransform>();
-        targetPosition = pointB.position;
+
+        // ??????????????? pointB ????
+        if (pointB != null)
+            targetPosition = pointB.position;
     }
 
     void Update()
     {
-        // Move the pointer towards the target position
-        pointerTransform.position = Vector3.MoveTowards(pointerTransform.position, targetPosition, moveSpeed * Time.deltaTime);
+        if (!qteActive) return;
+        if (pointA == null || pointB == null || pointerTransform == null) return;
 
-        // Change direction if the pointer reaches one of the points
+        // ??????? pointer ????? target
+        pointerTransform.position = Vector3.MoveTowards(
+            pointerTransform.position,
+            targetPosition,
+            moveSpeed * Time.deltaTime
+        );
+
+        // ????????????????????? A ???? B
         if (Vector3.Distance(pointerTransform.position, pointA.position) < 0.1f)
         {
             targetPosition = pointB.position;
-            direction = 1f;
         }
         else if (Vector3.Distance(pointerTransform.position, pointB.position) < 0.1f)
         {
             targetPosition = pointA.position;
-            direction = -1f;
         }
 
-        // Check for input
+        // ???????? (????????????? KeyCode.E ?????)
         if (Input.GetKeyDown(KeyCode.Space))
         {
             CheckSuccess();
@@ -43,14 +61,48 @@ public class PointerController : MonoBehaviour
 
     void CheckSuccess()
     {
-        // Check if the pointer is within the safe zone
-        if (RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointerTransform.position, null))
+        if (safeZone == null || pointerTransform == null) return;
+
+        bool inSafe = RectTransformUtility.RectangleContainsScreenPoint(
+            safeZone,
+            pointerTransform.position,
+            null   // ??? Canvas ???? Screen Space - Overlay ??? null ???
+        );
+
+        if (inSafe)
         {
-            Debug.Log("Success!");
+            Debug.Log("QTE Success!");
+            failCount = 0;
         }
         else
         {
-            Debug.Log("Fail!");
+            failCount++;
+            Debug.Log($"QTE Fail {failCount}/{maxFails}");
+
+            if (failCount >= maxFails)
+            {
+                OnQTEFailedMax();
+            }
         }
+    }
+
+    void OnQTEFailedMax()
+    {
+        Debug.Log("QTE failed 3 times -> Enemy starts chasing your hiding spot!");
+
+        qteActive = false;
+
+        // ??? UI QTE
+        if (qteRoot != null)
+            qteRoot.SetActive(false);
+
+        // ?????????????? "??????????????" ??? player ????
+        if (enemyAI != null)
+        {
+            enemyAI.CatchPlayerInHiding(hidingTarget);
+        }
+
+        // ????????????????
+        enabled = false;
     }
 }

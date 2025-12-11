@@ -37,6 +37,12 @@ public class PhoneChat : MonoBehaviour
 
             ToggleChat();
         }
+        
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            ExitChat();
+        }
+
     }
 
     void ToggleChat()
@@ -45,6 +51,17 @@ public class PhoneChat : MonoBehaviour
 
         if (phoneChatRoot != null)
             phoneChatRoot.SetActive(IsChatOpen);
+
+        if (playerInteract != null) playerInteract.enabled = !IsChatOpen;
+        if (cateyeDoor != null) cateyeDoor.enabled = !IsChatOpen;
+        if (flashlightController != null) flashlightController.enabled = !IsChatOpen;
+        if (hotBar != null) hotBar.enabled = !IsChatOpen;
+        if (firstPersonController != null) firstPersonController.enabled = !IsChatOpen;
+    }
+
+    void ExitChat()
+    {
+        phoneChatRoot.SetActive(false);
 
         if (playerInteract != null) playerInteract.enabled = !IsChatOpen;
         if (cateyeDoor != null) cateyeDoor.enabled = !IsChatOpen;

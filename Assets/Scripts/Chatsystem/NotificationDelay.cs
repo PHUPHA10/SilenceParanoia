@@ -1,6 +1,6 @@
 using StarterAssets;
 using UnityEngine;
-using UnityEngine.UI;   // ?????????????????
+using UnityEngine.UI;
 
 public class NotificationDelay : MonoBehaviour
 {
@@ -10,88 +10,125 @@ public class NotificationDelay : MonoBehaviour
     public float moveSpeed = 300f;
 
     [Header("Move Points")]
-    public RectTransform pointA;
-    public RectTransform pointB;
+    public Transform pointA;   // ???????
+    public Transform pointB;   // ???????
 
     [Header("Chat System")]
-    public GameObject chatPanel;            // <- ????????????????!
+    public GameObject chatPanel;
 
-    private bool startMove = false;
+    private bool movingDown = false;
+    private bool movingUp = false;
+    private bool clicked = false;
+
+    private float stayTimer = 0f;
+    private float stayDuration = 10f;  // ??????????? 15 ??????
 
     void Start()
     {
-        if (notificationUI != null)
+        if (notificationUI != null && pointA != null)
         {
-            notificationUI.anchoredPosition = pointA.anchoredPosition;
+            notificationUI.position = pointA.position;
             notificationUI.gameObject.SetActive(false);
         }
 
         if (chatPanel != null)
-            chatPanel.SetActive(false);     // ?????????????
+            chatPanel.SetActive(false);
 
-        // ????????????
-        Invoke(nameof(ShowAndMove), delayTime);
+        // ??????????????????????
+        Invoke(nameof(ShowAndMoveDown), delayTime);
 
-        // ????????????????
-        Button btn = notificationUI.GetComponent<Button>();
-        if (btn != null)
+        // ?????????????? ? ???????
+        if (notificationUI != null)
         {
-            btn.onClick.AddListener(OpenChat);  // ???????????????????
+            Button btn = notificationUI.GetComponent<Button>();
+            if (btn != null)
+                btn.onClick.AddListener(OpenChat);
         }
     }
 
-    void ShowAndMove()
+    void ShowAndMoveDown()
     {
-        if (notificationUI != null)
-        {
-            notificationUI.gameObject.SetActive(true);
-            startMove = true;   // ?????????????
-        }
+        if (notificationUI == null || pointB == null) return;
 
-        // ? ???????????????????????????????? Notification ???
+        notificationUI.gameObject.SetActive(true);
+        movingDown = true;
+        movingUp = false;
+        clicked = false;
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-
     void Update()
     {
-        if (!startMove) return;
+        if (notificationUI == null || pointA == null || pointB == null) return;
 
-        notificationUI.anchoredPosition = Vector2.MoveTowards(
-            notificationUI.anchoredPosition,
-            pointB.anchoredPosition,
-            moveSpeed * Time.deltaTime
-        );
-
-        if (Vector2.Distance(notificationUI.anchoredPosition, pointB.anchoredPosition) < 0.1f)
+        if (movingDown)
         {
-            startMove = false;
+            MoveTo(pointB.position);
+
+            // ?????????? ? ???????????? 15 ??
+            if (IsNear(notificationUI.position, pointB.position))
+            {
+                movingDown = false;
+                stayTimer = 0f;
+            }
         }
+        else if (!clicked && notificationUI.gameObject.activeSelf)
+        {
+            // ?????????????? ?
+            stayTimer += Time.deltaTime;
+
+            if (stayTimer >= stayDuration)
+            {
+                movingUp = true;   // ??? 15 ?? ? ??????????????
+            }
+        }
+
+        if (movingUp)
+        {
+            MoveTo(pointA.position);
+
+            if (IsNear(notificationUI.position, pointA.position))
+            {
+                movingUp = false;
+                notificationUI.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void MoveTo(Vector3 targetPos)
+    {
+        notificationUI.position =
+            Vector3.MoveTowards(
+                notificationUI.position,
+                targetPos,
+                moveSpeed * Time.deltaTime
+            );
+    }
+
+    private bool IsNear(Vector3 a, Vector3 b)
+    {
+        return Vector3.Distance(a, b) < 0.1f;
     }
 
     public void OpenChat()
     {
-        Debug.Log("Opening Chat from Notification");
+        clicked = true;
 
-        // 1) ???? Notification
         if (notificationUI != null)
             notificationUI.gameObject.SetActive(false);
 
-        // 2) ???????????
         if (chatPanel != null)
             chatPanel.SetActive(true);
 
-        // 3) ??????????????????????????? (????????? ????????)
         var fpc = FindObjectOfType<FirstPersonController>();
         if (fpc != null) fpc.enabled = false;
 
         var playerInteract = FindObjectOfType<PlayerInteract>();
         if (playerInteract != null) playerInteract.enabled = false;
 
-        // 4) ????????????????? UI ???
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-
 }
