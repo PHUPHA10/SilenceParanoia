@@ -1,7 +1,7 @@
 using StarterAssets;
 using UnityEngine;
 
-public class ChatOverlayController : MonoBehaviour
+public class ChatController : MonoBehaviour
 {
     public GameObject chatRoot;
     public KeyCode toggleKey = KeyCode.M;
@@ -89,7 +89,7 @@ public class ChatOverlayController : MonoBehaviour
         if (firstPersonController != null) firstPersonController.enabled = true;
     }
 
-    // ??? noti ???????????????????
+
     public void OpenFromNotification()
     {
         OpenChat();

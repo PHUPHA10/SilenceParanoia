@@ -122,13 +122,7 @@ public class NotificationDelay : MonoBehaviour
         if (chatPanel != null)
             chatPanel.SetActive(true);
 
-        var fpc = FindObjectOfType<FirstPersonController>();
-        if (fpc != null) fpc.enabled = false;
 
-        var playerInteract = FindObjectOfType<PlayerInteract>();
-        if (playerInteract != null) playerInteract.enabled = false;
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 }

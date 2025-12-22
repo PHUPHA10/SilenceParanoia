@@ -30,8 +30,7 @@ public class PlayerManager : MonoBehaviour
 
             Player.SetActive(true);
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+
         }
     }
 }

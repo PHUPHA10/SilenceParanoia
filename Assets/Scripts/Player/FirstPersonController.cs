@@ -46,6 +46,29 @@ namespace StarterAssets
         [Tooltip("How far in degrees can you move the camera down")]
         public float BottomClamp = -90.0f;
 
+        [Header("Camera")]
+        public Transform cameraHolder;
+        public float cameraStandingY = 0.9f;
+        public float cameraCrouchY = 0.5f;
+
+        [Header("Animation")]
+        Animator animator;
+        CharacterController characterController;
+        Vector3 inputVec;
+        Vector3 targetDirection;
+        private Vector3 moveDirection = Vector3.zero;
+        public string crouchParam = "isCrouching";
+
+
+        // internal
+        private bool isCrouching = false;
+        private float currentHeight;
+        private Vector3 currentCenter;
+        private float targetHeight;
+        private Vector3 targetCenter;
+        private float cameraTargetY;
+        private float velocityHeight;
+
         // cinemachine
         private float _cinemachineTargetPitch;
 
@@ -54,6 +77,9 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
+        PlayerInput playerInput;
+        InputAction crouchaction;
+
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -92,6 +118,9 @@ namespace StarterAssets
 
         private void Start()
         {
+            if (animator == null)
+                animator = GetComponentInChildren<Animator>();
+
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
@@ -110,6 +139,26 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            float z = Input.GetAxisRaw("Horizontal");
+            float x = -(Input.GetAxisRaw("Vertical"));
+            inputVec = new Vector3(x, 0, z);
+
+            //Animation
+
+            animator.SetFloat("Input X", z);
+            animator.SetFloat("Input Z", -(x));
+            if (x != 0 || z != 0)
+            {
+                animator.SetBool("Moving", true);
+                animator.SetBool("Running", true);
+            }
+            else
+            {
+                animator.SetBool("Moving", false);
+                animator.SetBool("Running", false);
+
+            }
+
         }
 
         private void LateUpdate()
