@@ -13,7 +13,7 @@ public class DoorInteract : MonoBehaviour, IInteractable
     private bool isOpen = false;
     private bool isAnimating = false;  // กันกดซ้ำระหว่างเล่นอนิเมชั่น
 
-    public string Prompt => isOpen ? "Close Door" : "Open Door";
+    public string Prompt => isOpen ? "ปิดประตู" : "เปิดประตู";
 
     public void Interact()
     {

@@ -17,8 +17,8 @@ public class CateyeDoor : MonoBehaviour, IInteractable
     private bool isLooking = false;
 
     public string Prompt =>
-        isLooking ? "stop checking outside "
-                  : "check outside the room ";
+        isLooking ? "?????????????????"
+                  : "?????????????";
 
     void Start()
     {
