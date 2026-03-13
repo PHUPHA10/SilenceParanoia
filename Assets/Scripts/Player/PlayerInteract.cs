@@ -39,6 +39,7 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenuManager.IsPaused) return;
         if (IsInDialogue)
         {
             HidePrompt();
@@ -53,11 +54,7 @@ public class PlayerInteract : MonoBehaviour
             HidePrompt();
         }
 
-        // ปุ่ม Q สำหรับตาแมว
-        if (current is CateyeDoor cateye && Keyboard.current.qKey.wasPressedThisFrame)
-        {
-            cateye.ToggleCateye();
-        }
+
 
     }
     public void RefreshPrompt(IInteractable interactable)
@@ -85,10 +82,11 @@ public class PlayerInteract : MonoBehaviour
                                 ?? hit.collider.GetComponentInParent<OutlineItem>();
 
             // เปลี่ยนข้อความกด E เฉพาะตอนเปลี่ยน Target
-            if (current != null && current != last)
-            {
-                ShowPrompt(current.Prompt);
-            }
+if (current != null)
+{
+    ShowPrompt(current.Prompt);
+}
+
 
             // ✅ ส่วนที่แก้: จัดการเปิด/ปิดขอบให้ถูก
             if (currentoutlineitem != lastoutlineitem)
@@ -128,9 +126,6 @@ public class PlayerInteract : MonoBehaviour
         if (promptLabel != null)
         {
             string keyText = "E";
-
-            if (current is CateyeDoor )
-                keyText = "Q";
 
             promptLabel.text = $"กด {keyText} เพื่อ {prompt}";
             promptLabel.enabled = true;

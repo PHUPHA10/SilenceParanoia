@@ -45,6 +45,9 @@ public class FlashlightController : MonoBehaviour
     [SerializeField] private bool conserveBrightness = true;
     [SerializeField] private float widenLerpSpeed = 10f;
 
+    [Header("Quest Lock")]
+    [SerializeField] private QuestTimer questTimer;
+
     private Light flashLight;
     private float baseIntensity;
     private float baseSpotAngle;
@@ -83,9 +86,16 @@ public class FlashlightController : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenuManager.IsPaused) return;
         bool pressed = toggleAction ? toggleAction.action.WasPressedThisFrame()
                                     : Input.GetKeyDown(fallbackKey);
-        if (pressed) Toggle();
+        if (pressed)
+        {
+            if (questTimer == null || !questTimer.IsQuestRunning)
+                return;
+
+            Toggle();
+        }
 
         if (isOn && (autoDimNearSurface || autoWiden))
             ApplyNearSurfaceAdjust();

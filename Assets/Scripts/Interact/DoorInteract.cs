@@ -7,43 +7,90 @@ public class DoorInteract : MonoBehaviour, IInteractable
     [SerializeField] private Animator Door;
 
     [Header("Animation Durations (seconds)")]
-    [SerializeField] private float openDuration = 1.0f;   // ความยาวอนิเมชั่นเปิด
-    [SerializeField] private float closeDuration = 1.0f;  // ความยาวอนิเมชั่นปิด
+    [SerializeField] private float openDuration = 1.0f;
+    [SerializeField] private float closeDuration = 1.0f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource doorAudio;
+    [SerializeField] private AudioClip openSound;
+    [SerializeField] private AudioClip closeSound;
 
     private bool isOpen = false;
-    private bool isAnimating = false;  // กันกดซ้ำระหว่างเล่นอนิเมชั่น
+    private bool isAnimating = false;
 
     public string Prompt => isOpen ? "ปิดประตู" : "เปิดประตู";
 
     public void Interact()
     {
-        // ถ้าอนิเมชั่นกำลังเล่นอยู่ ห้ามกดซ้ำ
         if (isAnimating) return;
 
         if (isOpen)
         {
-            // เล่นอนิเมชั่นปิด
-            Door.SetTrigger("Close");
-            StartCoroutine(DoorRoutine(false));
-            isOpen = false;
+            CloseDoorInternal();
         }
         else
         {
-            // เล่นอนิเมชั่นเปิด
-            Door.SetTrigger("Open");
-            StartCoroutine(DoorRoutine(true));
-            isOpen = true;
+            OpenDoorInternal();
         }
+    }
+
+
+    public void OpenDoor()
+    {
+        if (isAnimating || isOpen) return;
+        OpenDoorInternal();
+    }
+
+
+    public void CloseDoor()
+    {
+        if (isAnimating || !isOpen) return;
+        CloseDoorInternal();
+    }
+
+
+
+    void OpenDoorInternal()
+    {
+        Door.SetTrigger("Open");
+        PlayOpenSound();
+        StartCoroutine(DoorRoutine(true));
+        isOpen = true;
+    }
+
+    void CloseDoorInternal()
+    {
+        Door.SetTrigger("Close");
+        PlayCloseSound();
+        StartCoroutine(DoorRoutine(false));
+        isOpen = false;
     }
 
     private IEnumerator DoorRoutine(bool opening)
     {
         isAnimating = true;
 
-        // รอเวลาเท่าความยาวคลิป (ตั้งค่าใน Inspector)
         float waitTime = opening ? openDuration : closeDuration;
         yield return new WaitForSeconds(waitTime);
 
         isAnimating = false;
+    }
+
+    void PlayOpenSound()
+    {
+        if (doorAudio != null && openSound != null)
+        {
+            doorAudio.pitch = Random.Range(0.95f, 1.05f);
+            doorAudio.PlayOneShot(openSound);
+        }
+    }
+
+    void PlayCloseSound()
+    {
+        if (doorAudio != null && closeSound != null)
+        {
+            doorAudio.pitch = Random.Range(0.95f, 1.05f);
+            doorAudio.PlayOneShot(closeSound);
+        }
     }
 }

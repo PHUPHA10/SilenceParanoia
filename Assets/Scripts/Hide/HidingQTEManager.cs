@@ -1,19 +1,29 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HidingQTEManager : MonoBehaviour
 {
     public static HidingQTEManager Instance { get; private set; }
 
     [Header("References")]
-    public hidingPlace hideSpot;    // ?????????? (????? hidingPlace) ?????
-    public GameObject qteRoot;      // UI QTE ?????????
+    public GameObject qteRoot;
+
+    [Header("QTE Games")]
+    public GameObject[] qteGames;
 
     [Header("Timing")]
-    public float showDelay = 10f;   // ??????????????????? QTE ????
+    public float showDelay = 10f;
+    public float switchInterval = 15f;
 
     public bool IsQteActive { get; private set; }
 
-    float hideTimer = 0f;
+    private hidingPlace currentHideSpot;
+    public hidingPlace CurrentHideSpot => currentHideSpot;
+
+    private float hideTimer = 0f;
+    private float qteTimer = 0f;
+
+    private GameObject activeQTE;
+    private int lastIndex = -1;
 
     void Awake()
     {
@@ -29,61 +39,109 @@ public class HidingQTEManager : MonoBehaviour
     {
         if (qteRoot != null)
             qteRoot.SetActive(false);
+
+        foreach (var qte in qteGames)
+            if (qte != null)
+                qte.SetActive(false);
     }
 
     void Update()
     {
-        if (hideSpot == null)
+        if (currentHideSpot == null || !currentHideSpot.IsHiding)
         {
-            // Debug ?????????????
-            // Debug.LogWarning("HidingQTEManager: hideSpot = null");
+            hideTimer = 0f;
+            qteTimer = 0f;
             return;
         }
 
-        if (hideSpot.IsHiding)
+        if (!IsQteActive)
         {
             hideTimer += Time.deltaTime;
 
-            // Debug ??????????????????????
-            // Debug.Log($"Hiding... {hideTimer:0.00}s");
-
-            if (!IsQteActive && hideTimer >= showDelay)
-            {
+            if (hideTimer >= showDelay)
                 ActivateQTE();
-            }
         }
         else
         {
-            hideTimer = 0f;
+            qteTimer += Time.deltaTime;
 
-            if (IsQteActive)
-                DeactivateQTE();
+            if (qteTimer >= switchInterval)
+                SwitchQTE();
         }
+    }
+
+
+    public void RegisterHideSpot(hidingPlace spot)
+    {
+
+        ForceStopQTE();
+
+        currentHideSpot = spot;
+        hideTimer = 0f;
+        qteTimer = 0f;
+
+        Debug.Log("REGISTER HIDE SPOT: " + spot.gameObject.name);
+    }
+
+    public void UnregisterHideSpot(hidingPlace spot)
+    {
+        if (currentHideSpot == spot)
+        {
+            ForceStopQTE();
+            currentHideSpot = null;
+        }
+    }
+
+
+    public void OnQTEFail()
+    {
+        ForceStopQTE();
     }
 
     void ActivateQTE()
     {
         IsQteActive = true;
+        qteTimer = 0f;
 
         if (qteRoot != null)
             qteRoot.SetActive(true);
 
-        Debug.Log("QTE Activated");
+        SwitchQTE();
     }
 
-    public void CompleteQTE()
+    void SwitchQTE()
     {
-        DeactivateQTE();
-        Debug.Log("QTE Completed");
+        foreach (var qte in qteGames)
+            if (qte != null)
+                qte.SetActive(false);
+
+        int index;
+        do
+        {
+            index = Random.Range(0, qteGames.Length);
+        }
+        while (index == lastIndex && qteGames.Length > 1);
+
+        lastIndex = index;
+
+        activeQTE = qteGames[index];
+        activeQTE.SetActive(true);
+
+        qteTimer = 0f;
+
+
     }
 
-    void DeactivateQTE()
+    public void ForceStopQTE()
     {
         IsQteActive = false;
+        hideTimer = 0f;
+        qteTimer = 0f;
+
+        if (activeQTE != null)
+            activeQTE.SetActive(false);
 
         if (qteRoot != null)
             qteRoot.SetActive(false);
-
-        hideTimer = 0f;
     }
 }

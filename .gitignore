@@ -4,8 +4,10 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
-[Uu]serSettings/
-MemoryCaptures/
+
+UserSettings/
+
+.vs/
 *.csproj
 *.unityproj
 *.sln
@@ -20,4 +22,3 @@ MemoryCaptures/
 *.mdb
 *.opendb
 *.VC.db
-.vs/

@@ -68,11 +68,15 @@ public class ChatController : MonoBehaviour
 
         IsChatOpen = true;
 
+        // ? ???????????????? E / ???????
         if (playerInteract != null) playerInteract.enabled = false;
         if (cateyeDoor != null) cateyeDoor.enabled = false;
         if (flashlightController != null) flashlightController.enabled = false;
         if (hotBar != null) hotBar.enabled = false;
         if (firstPersonController != null) firstPersonController.enabled = false;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     void CloseChat()
@@ -82,12 +86,17 @@ public class ChatController : MonoBehaviour
 
         IsChatOpen = false;
 
+        // ?? ????????????
         if (playerInteract != null) playerInteract.enabled = true;
         if (cateyeDoor != null) cateyeDoor.enabled = true;
         if (flashlightController != null) flashlightController.enabled = true;
         if (hotBar != null) hotBar.enabled = true;
         if (firstPersonController != null) firstPersonController.enabled = true;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
+
 
 
     public void OpenFromNotification()

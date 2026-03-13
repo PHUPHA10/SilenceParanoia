@@ -1,27 +1,31 @@
-using StarterAssets;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class NotificationDelay : MonoBehaviour
 {
     [Header("Notification UI")]
     public RectTransform notificationUI;
-    public float delayTime = 30f;
+    public float delayTime = 4f;
     public float moveSpeed = 300f;
 
     [Header("Move Points")]
-    public Transform pointA;   // ???????
-    public Transform pointB;   // ???????
+    public Transform pointA;
+    public Transform pointB;
 
     [Header("Chat System")]
     public GameObject chatPanel;
+    public TMP_Text helpText;
 
-    private bool movingDown = false;
-    private bool movingUp = false;
-    private bool clicked = false;
+    [Header("Audio")]
+    public AudioSource notificationAudio;   // AudioSource กลาง (อยู่ใต้ Canvas)
+    public AudioClip popupSound;             // 🔔 เสียงแจ้งเตือนเด้ง
+    public AudioClip clickSound;             // 👆 เสียงกดแจ้งเตือน
+    public float soundLeadTime = 0.1f;        // เสียงเด้งมาก่อน UI
 
-    private float stayTimer = 0f;
-    private float stayDuration = 10f;  // ??????????? 15 ??????
+    bool movingDown;
+    bool clicked;
+    bool consumed;
 
     void Start()
     {
@@ -34,26 +38,35 @@ public class NotificationDelay : MonoBehaviour
         if (chatPanel != null)
             chatPanel.SetActive(false);
 
-        // ??????????????????????
-        Invoke(nameof(ShowAndMoveDown), delayTime);
 
-        // ?????????????? ? ???????
+        Invoke(nameof(PlayPopupSound),
+            Mathf.Max(0f, delayTime - soundLeadTime));
+
+
+        Invoke(nameof(ShowNotification), delayTime);
+
+
         if (notificationUI != null)
         {
             Button btn = notificationUI.GetComponent<Button>();
             if (btn != null)
-                btn.onClick.AddListener(OpenChat);
+                btn.onClick.AddListener(OnNotificationClicked);
         }
     }
 
-    void ShowAndMoveDown()
+    void PlayPopupSound()
     {
-        if (notificationUI == null || pointB == null) return;
+        if (notificationAudio != null && popupSound != null)
+            notificationAudio.PlayOneShot(popupSound);
+    }
+
+    void ShowNotification()
+    {
+        if (notificationUI == null || pointB == null || consumed)
+            return;
 
         notificationUI.gameObject.SetActive(true);
         movingDown = true;
-        movingUp = false;
-        clicked = false;
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -61,68 +74,42 @@ public class NotificationDelay : MonoBehaviour
 
     void Update()
     {
-        if (notificationUI == null || pointA == null || pointB == null) return;
+        if (notificationUI == null || consumed) return;
 
         if (movingDown)
         {
-            MoveTo(pointB.position);
-
-            // ?????????? ? ???????????? 15 ??
-            if (IsNear(notificationUI.position, pointB.position))
-            {
-                movingDown = false;
-                stayTimer = 0f;
-            }
-        }
-        else if (!clicked && notificationUI.gameObject.activeSelf)
-        {
-            // ?????????????? ?
-            stayTimer += Time.deltaTime;
-
-            if (stayTimer >= stayDuration)
-            {
-                movingUp = true;   // ??? 15 ?? ? ??????????????
-            }
-        }
-
-        if (movingUp)
-        {
-            MoveTo(pointA.position);
-
-            if (IsNear(notificationUI.position, pointA.position))
-            {
-                movingUp = false;
-                notificationUI.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    private void MoveTo(Vector3 targetPos)
-    {
-        notificationUI.position =
-            Vector3.MoveTowards(
+            notificationUI.position = Vector3.MoveTowards(
                 notificationUI.position,
-                targetPos,
-                moveSpeed * Time.deltaTime
-            );
+                pointB.position,
+                moveSpeed * Time.deltaTime);
+
+            if (Vector3.Distance(notificationUI.position, pointB.position) < 0.1f)
+                movingDown = false;
+        }
+
+        // กด M = ถือว่า "กดแจ้งเตือน"
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            OnNotificationClicked();
+        }
     }
 
-    private bool IsNear(Vector3 a, Vector3 b)
+    void OnNotificationClicked()
     {
-        return Vector3.Distance(a, b) < 0.1f;
-    }
+        if (consumed) return;
+        consumed = true;
 
-    public void OpenChat()
-    {
-        clicked = true;
+        // 👆 เล่นเสียงกด
+        if (notificationAudio != null && clickSound != null)
+            notificationAudio.PlayOneShot(clickSound);
 
         if (notificationUI != null)
             notificationUI.gameObject.SetActive(false);
 
+        if (helpText != null)
+            helpText.gameObject.SetActive(false);
+
         if (chatPanel != null)
             chatPanel.SetActive(true);
-
-
-
     }
 }

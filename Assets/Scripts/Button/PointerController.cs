@@ -1,108 +1,88 @@
-using UnityEngine;
+﻿using UnityEngine;
+using TMPro;
 
 public class PointerController : MonoBehaviour
 {
-    [Header("Pointer Move")]
-    public Transform pointA;              // ????????
-    public Transform pointB;              // ???????
-    public RectTransform safeZone;        // ??????????
-    public float moveSpeed = 100f;        // ???????? pointer
+    public Transform pointA;
+    public Transform pointB;
+    public RectTransform safeZone;
+    public float moveSpeed = 100f;
 
-    [Header("QTE Logic")]
-    public int maxFails = 3;              // ???????????????
-    public GameObject qteRoot;            // Root UI ??? QTE (Panel ??????? pointer + bar)
-    public EnemyAI enemyAI;               // ?????????????????? Inspector
+    public int maxFails = 3;
+    public float inputWindowTime = 3f;
+    public TMP_Text failText;
 
-    [Header("Hiding Target")]
-    public Transform hidingTarget;        // ??????????????????????? (???? ?????????? / ???????)
+    RectTransform pointer;
+    Vector3 target;
+    int failCount;
+    float timer;
+    bool active;
 
-    private RectTransform pointerTransform;
-    private Vector3 targetPosition;
-    private int failCount = 0;
-    private bool qteActive = true;
-
-    void Start()
+    void OnEnable()
     {
-        pointerTransform = GetComponent<RectTransform>();
-
-        // ??????????????? pointB ????
-        if (pointB != null)
-            targetPosition = pointB.position;
+        pointer = GetComponent<RectTransform>();
+        target = pointB.position;
+        failCount = 0;
+        active = true;
+        ResetWindow();
+        UpdateText();
     }
 
     void Update()
     {
-        if (!qteActive) return;
-        if (pointA == null || pointB == null || pointerTransform == null) return;
+        if (!active) return;
 
-        // ??????? pointer ????? target
-        pointerTransform.position = Vector3.MoveTowards(
-            pointerTransform.position,
-            targetPosition,
-            moveSpeed * Time.deltaTime
-        );
+        pointer.position = Vector3.MoveTowards(pointer.position, target, moveSpeed * Time.deltaTime);
 
-        // ????????????????????? A ???? B
-        if (Vector3.Distance(pointerTransform.position, pointA.position) < 0.1f)
+        if (Vector3.Distance(pointer.position, pointA.position) < 0.1f) target = pointB.position;
+        if (Vector3.Distance(pointer.position, pointB.position) < 0.1f) target = pointA.position;
+
+        timer += Time.deltaTime;
+
+        if (timer >= inputWindowTime)
         {
-            targetPosition = pointB.position;
-        }
-        else if (Vector3.Distance(pointerTransform.position, pointB.position) < 0.1f)
-        {
-            targetPosition = pointA.position;
+            RegisterFail();
+            ResetWindow();
         }
 
-        // ???????? (????????????? KeyCode.E ?????)
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CheckSuccess();
+            bool safe = RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointer.position);
+            if (!safe) RegisterFail();
+            ResetWindow();
         }
     }
 
-    void CheckSuccess()
+    void ResetWindow()
     {
-        if (safeZone == null || pointerTransform == null) return;
-
-        bool inSafe = RectTransformUtility.RectangleContainsScreenPoint(
-            safeZone,
-            pointerTransform.position,
-            null   // ??? Canvas ???? Screen Space - Overlay ??? null ???
-        );
-
-        if (inSafe)
-        {
-            Debug.Log("QTE Success!");
-            failCount = 0;
-        }
-        else
-        {
-            failCount++;
-            Debug.Log($"QTE Fail {failCount}/{maxFails}");
-
-            if (failCount >= maxFails)
-            {
-                OnQTEFailedMax();
-            }
-        }
+        timer = 0f;
     }
 
-    void OnQTEFailedMax()
+    void RegisterFail()
     {
-        Debug.Log("QTE failed 3 times -> Enemy starts chasing your hiding spot!");
+        failCount++;
+        UpdateText();
 
-        qteActive = false;
+        if (failCount >= maxFails)
+            Fail();
+    }
 
-        // ??? UI QTE
-        if (qteRoot != null)
-            qteRoot.SetActive(false);
+    void UpdateText()
+    {
+        if (failText)
+            failText.text = $"จำนวนครั้งที่พลาด {failCount} / {maxFails}";
+    }
 
-        // ?????????????? "??????????????" ??? player ????
-        if (enemyAI != null)
+    void Fail()
+    {
+        active = false;
+
+        if (HidingQTEManager.Instance != null &&
+            HidingQTEManager.Instance.CurrentHideSpot != null)
         {
-            enemyAI.CatchPlayerInHiding(hidingTarget);
+            HidingQTEManager.Instance.CurrentHideSpot.ForceExitHide();
         }
 
-        // ????????????????
-        enabled = false;
+        gameObject.SetActive(false);
     }
 }

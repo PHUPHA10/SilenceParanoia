@@ -1,31 +1,39 @@
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class ChatSwitcher : MonoBehaviour
 {
-    [Header("???????????????????")]
-    public GameObject[] chatPanels;          // [0] = ???????? 1, [1] = ???????? 2 ...
+    [Header("Chat Panels")]
+    public GameObject[] chatPanels;
 
-    [Header("?????????? (???????????????? chatPanels)")]
-    public RectTransform[] profileImages;    // [0] = ???????? 1, [1] = ???????? 2 ...
+    [Header("Profile Buttons")]
+    public RectTransform[] profileButtons;
 
-    // ??????????????????? (???????? 0)
-    private int currentIndex = 0;
+    [Header("Audio")]
+    public AudioSource chatAudio;     // AudioSource กลาง (อยู่ใต้ Canvas)
+    public AudioClip switchClip;      // เสียงตอนสลับแชท
+
+    int currentIndex = 0;
 
     void Start()
     {
-        OpenChat(0);  // ?????????????????????
+        OpenChat(0);
     }
 
     public void OpenChat(int index)
     {
-        // ???????????????????? -> ?????????????????
+        if (index < 0 || index >= chatPanels.Length)
+            return;
+
+        // 🔊 เล่นเสียงเฉพาะตอนสลับจริง
         if (index != currentIndex)
         {
+            if (chatAudio != null && switchClip != null)
+                chatAudio.PlayOneShot(switchClip);
+
             SwapProfilePositions(currentIndex, index);
         }
 
-        // ????/????????????????? index
+        // เปิดเฉพาะแชทที่เลือก
         for (int i = 0; i < chatPanels.Length; i++)
         {
             if (chatPanels[i] != null)
@@ -35,15 +43,16 @@ public class ChatSwitcher : MonoBehaviour
         currentIndex = index;
     }
 
-    void SwapProfilePositions(int a, int b)
+    void SwapProfilePositions(int oldIndex, int newIndex)
     {
-        if (profileImages == null) return;
-        if (a < 0 || b < 0) return;
-        if (a >= profileImages.Length || b >= profileImages.Length) return;
+        if (profileButtons == null ||
+            oldIndex >= profileButtons.Length ||
+            newIndex >= profileButtons.Length)
+            return;
 
-        // ???? anchoredPosition ????????????
-        Vector2 temp = profileImages[a].anchoredPosition;
-        profileImages[a].anchoredPosition = profileImages[b].anchoredPosition;
-        profileImages[b].anchoredPosition = temp;
+        Vector3 temp = profileButtons[oldIndex].anchoredPosition;
+        profileButtons[oldIndex].anchoredPosition =
+            profileButtons[newIndex].anchoredPosition;
+        profileButtons[newIndex].anchoredPosition = temp;
     }
 }

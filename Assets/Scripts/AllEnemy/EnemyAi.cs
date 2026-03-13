@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,8 +6,11 @@ public class EnemyAI : MonoBehaviour
 {
     [Header("References")]
     public NavMeshAgent ai;
-    public Transform player;              // ???????? (???????????)
-    public List<Transform> destinations;
+    public Transform player;
+    public Animator animator;
+
+    [Header("Patrol")]
+    public List<Transform> destinations = new List<Transform>();
 
     [Header("Movement")]
     public float walkSpeed = 2f;
@@ -18,50 +21,56 @@ public class EnemyAI : MonoBehaviour
     public float catchDistance = 1.5f;
     public Vector3 rayCastOffset = new Vector3(0, 1.5f, 0);
 
+    [Header("Kill Control")]
+    public MonoBehaviour[] playerDisableOnKill;
+    public Camera playerCamera;
+
     bool walking = true;
     bool chasing = false;
+    bool killing = false;
 
     Transform currentDest;
     int randNum;
+    Transform chaseTarget;
+    [Header("Kill Audio")]
+    public AudioSource gunAudio;
+    public AudioClip gunShotClip;
 
-    // ??????????? chase (???? = player, ?????????????????????????????)
-    private Transform chaseTarget;
-
-    public bool IsChasing => chasing;
 
     void Start()
     {
-        if (destinations.Count > 0)
+        if (ai == null)
+            ai = GetComponent<NavMeshAgent>();
+
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+
+        if (destinations != null && destinations.Count > 0)
         {
             randNum = Random.Range(0, destinations.Count);
             currentDest = destinations[randNum];
         }
 
+        ai.speed = walkSpeed;
+        ai.isStopped = false;
+
         walking = true;
         chasing = false;
+        killing = false;
 
-        if (ai != null)
-        {
-            ai.speed = walkSpeed;
-            ai.isStopped = false;
-        }
-
-        // ?????????????? player ????????
         chaseTarget = player;
     }
 
     void Update()
     {
+        if (killing) return;
+
         HandleVision();
 
         if (chasing)
-        {
             ChasePlayer();
-        }
         else if (walking)
-        {
             Patrol();
-        }
     }
 
     void HandleVision()
@@ -76,10 +85,8 @@ public class EnemyAI : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(origin, dir, out hit, sightDistance))
         {
-            // ??? root tag "Player" ????? collider ??????????
             if (hit.collider.transform.root.CompareTag("Player"))
             {
-                // ???????????? player ???? ? ? ??????? chaseTarget ????????? player
                 chaseTarget = player;
                 StartChase();
             }
@@ -88,46 +95,105 @@ public class EnemyAI : MonoBehaviour
 
     void StartChase()
     {
-        if (ai == null) return;
-
-        if (!chasing)
-            Debug.Log(">>> SWITCH TO CHASE <<<");
+        if (chasing || killing) return;
 
         chasing = true;
         walking = false;
+
         ai.isStopped = false;
         ai.speed = chaseSpeed;
     }
 
     void ChasePlayer()
     {
-        if (ai == null) return;
-
-        // ???????????????? ??? fallback ???? player
-        if (chaseTarget == null)
-        {
-            chaseTarget = player;
-            if (chaseTarget == null) return;
-        }
+        if (ai == null || chaseTarget == null) return;
 
         ai.destination = chaseTarget.position;
 
-        float distance = Vector3.Distance(chaseTarget.position, ai.transform.position);
+        float distance = Vector3.Distance(
+            ai.transform.position,
+            chaseTarget.position
+        );
+
         if (distance <= catchDistance)
         {
-            Debug.Log("Enemy reached target (player / hiding spot)!");
-
-            chasing = false;
-            walking = false;
-            ai.isStopped = true;
-
-            // TODO: ??? logic ??? / jumpscare / load scene ??????
+            KillPlayer();
         }
     }
 
+    public void PlayGunShot()
+    {
+        if (gunAudio != null && gunShotClip != null)
+        {
+            gunAudio.pitch = Random.Range(0.95f, 1.05f);
+            gunAudio.PlayOneShot(gunShotClip);
+        }
+    }
+
+    void KillPlayer()
+    {
+        if (killing) return;
+        killing = true;
+
+        chasing = false;
+        walking = false;
+
+
+        if (ai != null)
+        {
+            ai.isStopped = true;
+            ai.enabled = false;
+        }
+
+        if (player == null) return;
+
+
+        foreach (var comp in playerDisableOnKill)
+        {
+            if (comp != null)
+                comp.enabled = false;
+        }
+
+        if (playerCamera != null)
+        {
+            playerCamera.transform.localRotation = Quaternion.identity;
+        }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+
+        float killDistance = 0.8f;
+        Vector3 dir = (transform.position - player.position).normalized;
+        dir.y = 0f;
+
+        transform.position = player.position + dir * killDistance;
+
+        transform.LookAt(new Vector3(
+            player.position.x,
+            transform.position.y,
+            player.position.z
+        ));
+
+        if (animator != null)
+        {
+            animator.Play("Action_gun", 0, 0f);
+        }
+
+        Debug.Log("PLAYER KILLED");
+    }
+
+
     void Patrol()
     {
-        if (ai == null || currentDest == null) return;
+        if (ai == null || destinations == null || destinations.Count == 0)
+            return;
+
+        if (currentDest == null)
+        {
+            randNum = Random.Range(0, destinations.Count);
+            currentDest = destinations[randNum];
+        }
 
         ai.isStopped = false;
         ai.speed = walkSpeed;
@@ -135,52 +201,17 @@ public class EnemyAI : MonoBehaviour
 
         if (!ai.pathPending && ai.remainingDistance <= ai.stoppingDistance)
         {
-            if (destinations.Count > 0)
-            {
-                randNum = Random.Range(0, destinations.Count);
-                currentDest = destinations[randNum];
-            }
-        }
-    }
-
-    /// <summary>
-    /// ??? script ???????????????? ?????????? patrol
-    /// </summary>
-    public void StopChase()
-    {
-        if (!chasing || ai == null) return;
-
-        Debug.Log("Enemy stop chasing and return to patrol.");
-
-        chasing = false;
-        walking = true;
-        ai.isStopped = false;
-        ai.speed = walkSpeed;
-
-        if (destinations.Count > 0)
-        {
             randNum = Random.Range(0, destinations.Count);
             currentDest = destinations[randNum];
         }
-
-        // ??????????? player ????
-        chaseTarget = player;
     }
 
-    /// <summary>
-    /// ???????? QTE ?????????????? 3 ????? ????????????????
-    /// target = ?????????????? / ??????????????????
-    /// </summary>
+
     public void CatchPlayerInHiding(Transform hidingTarget)
     {
-        Debug.Log("Enemy detected player while hiding -> START CHASE to hiding target!");
+        if (killing) return;
 
-        // ??????????????????????? / player ?????????????????
-        if (hidingTarget != null)
-            chaseTarget = hidingTarget;
-        else
-            chaseTarget = player; // ??? null
-
+        chaseTarget = hidingTarget != null ? hidingTarget : player;
         StartChase();
     }
 }
