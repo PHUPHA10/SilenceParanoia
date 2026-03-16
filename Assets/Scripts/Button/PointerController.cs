@@ -3,79 +3,210 @@ using TMPro;
 
 public class PointerController : MonoBehaviour
 {
-    public Transform pointA;
-    public Transform pointB;
+    [Header("References")]
+    public GameObject heartBeatBG;
+    public RectTransform pointer;
+    public RectTransform pointA;
+    public RectTransform pointB;
     public RectTransform safeZone;
-    public float moveSpeed = 100f;
-
-    public int maxFails = 3;
-    public float inputWindowTime = 3f;
     public TMP_Text failText;
 
-    RectTransform pointer;
-    Vector3 target;
-    int failCount;
-    float timer;
-    bool active;
+    [Header("Timing")]
+    public float bgShowDelay = 3f;       // รอก่อนให้ BG โผล่
+    public float pointerShowDelay = 3.4f;  // หลัง BG โผล่ รอก่อนให้ pointer โผล่
 
-    void OnEnable()
+    [Header("Pointer Settings")]
+    public float moveSpeed = 120f;
+    public float inputWindowTime = 5f;
+
+    [Header("Fail Settings")]
+    public int maxFails = 3;
+
+    private Vector2 startPos;
+    private Vector2 endPos;
+
+    private int failCount;
+    private float stateTimer;
+    private float roundTimer;
+
+    private bool qteActive;
+    private bool pointerMoving;
+    private bool bgVisible;
+
+    private enum QTEState
     {
-        pointer = GetComponent<RectTransform>();
-        target = pointB.position;
-        failCount = 0;
-        active = true;
-        ResetWindow();
-        UpdateText();
+        WaitingForBG,
+        WaitingForPointer,
+        PointerMoving
     }
 
-    void Update()
+    private QTEState currentState;
+
+    private void Awake()
     {
-        if (!active) return;
+        SetBG(false);
+        SetPointer(false);
+    }
 
-        pointer.position = Vector3.MoveTowards(pointer.position, target, moveSpeed * Time.deltaTime);
+    private void OnEnable()
+    {
+        StartQTE();
+    }
 
-        if (Vector3.Distance(pointer.position, pointA.position) < 0.1f) target = pointB.position;
-        if (Vector3.Distance(pointer.position, pointB.position) < 0.1f) target = pointA.position;
+    private void Update()
+    {
+        if (!qteActive) return;
 
-        timer += Time.deltaTime;
+        stateTimer += Time.deltaTime;
 
-        if (timer >= inputWindowTime)
+        switch (currentState)
+        {
+            case QTEState.WaitingForBG:
+                if (stateTimer >= bgShowDelay)
+                {
+                    SetBG(true);
+                    bgVisible = true;
+                    stateTimer = 0f;
+                    currentState = QTEState.WaitingForPointer;
+                }
+                break;
+
+            case QTEState.WaitingForPointer:
+                if (stateTimer >= pointerShowDelay)
+                {
+                    SpawnPointer();
+                }
+                break;
+
+            case QTEState.PointerMoving:
+                UpdatePointerMovement();
+                break;
+        }
+    }
+
+    public void StartQTE()
+    {
+        UpdateText();
+
+        qteActive = true;
+        BeginNextRoundDelay();
+    }
+
+    private void BeginNextRoundDelay()
+    {
+        pointerMoving = false;
+        bgVisible = false;
+
+        roundTimer = 0f;
+        stateTimer = 0f;
+
+        SetBG(false);
+        SetPointer(false);
+
+        currentState = QTEState.WaitingForBG;
+    }
+
+    private void SpawnPointer()
+    {
+        stateTimer = 0f;
+        roundTimer = 0f;
+        pointerMoving = true;
+        currentState = QTEState.PointerMoving;
+
+        bool startFromA = Random.value > 0.5f;
+
+        if (startFromA)
+        {
+            startPos = pointA.anchoredPosition;
+            endPos = pointB.anchoredPosition;
+        }
+        else
+        {
+            startPos = pointB.anchoredPosition;
+            endPos = pointA.anchoredPosition;
+        }
+
+        pointer.anchoredPosition = startPos;
+        SetPointer(true);
+    }
+
+    private void UpdatePointerMovement()
+    {
+        roundTimer += Time.deltaTime;
+
+        pointer.anchoredPosition = Vector2.MoveTowards(
+            pointer.anchoredPosition,
+            endPos,
+            moveSpeed * Time.deltaTime
+        );
+
+        // ถึงปลาย = fail
+        if (Vector2.Distance(pointer.anchoredPosition, endPos) <= 0.01f)
         {
             RegisterFail();
-            ResetWindow();
+            if (qteActive) BeginNextRoundDelay();
+            return;
         }
 
+        // หมดเวลา = fail
+        if (roundTimer >= inputWindowTime)
+        {
+            RegisterFail();
+            if (qteActive) BeginNextRoundDelay();
+            return;
+        }
+
+        // กด
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            bool safe = RectTransformUtility.RectangleContainsScreenPoint(safeZone, pointer.position);
-            if (!safe) RegisterFail();
-            ResetWindow();
+            bool safe = RectTransformUtility.RectangleContainsScreenPoint(
+                safeZone,
+                RectTransformUtility.WorldToScreenPoint(null, pointer.position)
+            );
+
+            if (!safe)
+                RegisterFail();
+
+            if (qteActive) BeginNextRoundDelay();
         }
     }
 
-    void ResetWindow()
+    private void SetBG(bool visible)
     {
-        timer = 0f;
+        if (heartBeatBG != null)
+            heartBeatBG.SetActive(visible);
     }
 
-    void RegisterFail()
+    private void SetPointer(bool visible)
+    {
+        if (pointer != null)
+            pointer.gameObject.SetActive(visible);
+    }
+
+    private void RegisterFail()
     {
         failCount++;
         UpdateText();
 
         if (failCount >= maxFails)
+        {
             Fail();
+        }
     }
 
-    void UpdateText()
+    private void UpdateText()
     {
-        if (failText)
+        if (failText != null)
             failText.text = $"จำนวนครั้งที่พลาด {failCount} / {maxFails}";
     }
 
-    void Fail()
+    private void Fail()
     {
-        active = false;
+        qteActive = false;
+        pointerMoving = false;
+
+        SetBG(false);
+        SetPointer(false);
 
         if (HidingQTEManager.Instance != null &&
             HidingQTEManager.Instance.CurrentHideSpot != null)
