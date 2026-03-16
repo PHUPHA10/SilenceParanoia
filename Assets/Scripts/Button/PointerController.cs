@@ -10,6 +10,9 @@ public class PointerController : MonoBehaviour
     public RectTransform pointB;
     public RectTransform safeZone;
     public TMP_Text failText;
+    public AudioSource audioSource;
+    public AudioClip successSfx;
+    public AudioClip failSfx;
 
     [Header("Timing")]
     public float bgShowDelay = 3f;       // รอก่อนให้ BG โผล่
@@ -143,6 +146,7 @@ public class PointerController : MonoBehaviour
         // ถึงปลาย = fail
         if (Vector2.Distance(pointer.anchoredPosition, endPos) <= 0.01f)
         {
+            PlayFailSfx();
             RegisterFail();
             if (qteActive) BeginNextRoundDelay();
             return;
@@ -151,6 +155,7 @@ public class PointerController : MonoBehaviour
         // หมดเวลา = fail
         if (roundTimer >= inputWindowTime)
         {
+            PlayFailSfx();
             RegisterFail();
             if (qteActive) BeginNextRoundDelay();
             return;
@@ -164,8 +169,15 @@ public class PointerController : MonoBehaviour
                 RectTransformUtility.WorldToScreenPoint(null, pointer.position)
             );
 
-            if (!safe)
+            if (safe)
+            {
+                PlaySuccessSfx();
+            }
+            else
+            {
+                PlayFailSfx();
                 RegisterFail();
+            }
 
             if (qteActive) BeginNextRoundDelay();
         }
@@ -181,6 +193,17 @@ public class PointerController : MonoBehaviour
     {
         if (pointer != null)
             pointer.gameObject.SetActive(visible);
+    }
+    private void PlaySuccessSfx()
+    {
+        if (audioSource != null && successSfx != null)
+            audioSource.PlayOneShot(successSfx);
+    }
+
+    private void PlayFailSfx()
+    {
+        if (audioSource != null && failSfx != null)
+            audioSource.PlayOneShot(failSfx);
     }
 
     private void RegisterFail()
