@@ -5,15 +5,22 @@ using TMPro;
 public class SoundQTE : MonoBehaviour
 {
     [Header("Sound Limit (dB)")]
-    public float failDB = -5f;          // ถ้าเสียงดังกว่านี้ → แพ้
-    public float sensitivity = 0.05f;    // ปรับตามไมค์
+    public float failDB = -5f;
+    public float minDB = -40f;
+    public float sensitivity = 0.2f;
 
     [Header("UI")]
     public TMP_Text dbText;
     public TMP_Text hintText;
-    public Image dangerFill;            // optional (เช่น bar วัดเสียง)
+    public Image emptyImage;
+    public Image fullImage;
 
-    bool active;
+    [Header("Visual")]
+    public float riseSpeed = 20f;      // ขึ้นเร็ว
+    public float fallSmoothSpeed = 6f; // ลงช้ากว่า
+
+    private bool active;
+    private float currentFill;
 
     void OnEnable()
     {
@@ -21,10 +28,12 @@ public class SoundQTE : MonoBehaviour
         MicrophoneInput.StartMic();
 
         if (hintText != null)
-            hintText.text = "ถ้าอยากมีชีวิต ห้ามส่งเสียงเด็ดขาด...";
+            hintText.text = "ห้ามส่งเสียงเด็ดขาด...";
 
-        if (dangerFill != null)
-            dangerFill.fillAmount = 0f;
+        currentFill = 0f;
+
+        if (fullImage != null)
+            fullImage.fillAmount = 0f;
     }
 
     void OnDisable()
@@ -36,24 +45,41 @@ public class SoundQTE : MonoBehaviour
     {
         if (!active) return;
 
-        float loudness = MicrophoneInput.Loudness;
-        loudness = Mathf.Max(loudness, 0.0001f);
+        float loudness = Mathf.Max(MicrophoneInput.Loudness, 0.0001f);
 
         float db = 20f * Mathf.Log10(loudness / sensitivity);
         db = Mathf.Clamp(db, -60f, 0f);
 
-        // UI
         if (dbText != null)
             dbText.text = $"ระดับเสียง: {Mathf.RoundToInt(db)} dB";
 
-        if (dangerFill != null)
-            dangerFill.fillAmount = Mathf.InverseLerp(-40f, failDB, db);
+        float targetFill = Mathf.InverseLerp(minDB, failDB, db);
 
-        // ❌ ดังเกิน → แพ้
-        if (db > failDB)
+        // ถ้าเสียงเกินลิมิต ให้แดงเต็มทันที
+        if (db >= failDB)
         {
+            currentFill = 1f;
+
+            if (fullImage != null)
+                fullImage.fillAmount = 1f;
+
             Fail();
+            return;
         }
+
+        // เสียงดังขึ้น -> ขึ้นเร็วมาก
+        if (targetFill > currentFill)
+        {
+            currentFill = Mathf.MoveTowards(currentFill, targetFill, riseSpeed * Time.deltaTime);
+        }
+        // เสียงเบาลง -> ค่อย ๆ ลด
+        else
+        {
+            currentFill = Mathf.Lerp(currentFill, targetFill, Time.deltaTime * fallSmoothSpeed);
+        }
+
+        if (fullImage != null)
+            fullImage.fillAmount = currentFill;
     }
 
     void Fail()
