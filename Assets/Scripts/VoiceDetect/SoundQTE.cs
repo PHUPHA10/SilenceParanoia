@@ -16,8 +16,17 @@ public class SoundQTE : MonoBehaviour
     public Image fullImage;
 
     [Header("Visual")]
-    public float riseSpeed = 20f;      // ขึ้นเร็ว
-    public float fallSmoothSpeed = 6f; // ลงช้ากว่า
+    public float riseSpeed = 20f;      
+    public float fallSmoothSpeed = 6f; 
+
+
+    [Header("Gunshot SFX")]
+    public AudioSource gunAudioSource;
+    public AudioClip gunshotSfx;
+    public float gunshotInterval = 2f;
+
+    private float gunTimer;
+
 
     private bool active;
     private float currentFill;
@@ -26,6 +35,9 @@ public class SoundQTE : MonoBehaviour
     {
         active = true;
         MicrophoneInput.StartMic();
+
+
+        gunTimer = 0f;
 
         if (hintText != null)
             hintText.text = "ห้ามส่งเสียงเด็ดขาด...";
@@ -44,6 +56,13 @@ public class SoundQTE : MonoBehaviour
     void Update()
     {
         if (!active) return;
+
+        gunTimer += Time.deltaTime;
+        if (gunTimer >= gunshotInterval)
+        {
+            PlayGunshot();
+            gunTimer = 0f;
+        }
 
         float loudness = Mathf.Max(MicrophoneInput.Loudness, 0.0001f);
 
@@ -81,6 +100,16 @@ public class SoundQTE : MonoBehaviour
         if (fullImage != null)
             fullImage.fillAmount = currentFill;
     }
+
+
+    void PlayGunshot()
+    {
+        if (gunAudioSource != null && gunshotSfx != null)
+        {
+            gunAudioSource.PlayOneShot(gunshotSfx);
+        }
+    }
+
 
     void Fail()
     {

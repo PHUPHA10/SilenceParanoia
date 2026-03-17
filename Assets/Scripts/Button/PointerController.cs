@@ -24,6 +24,7 @@ public class PointerController : MonoBehaviour
 
     [Header("Fail Settings")]
     public int maxFails = 3;
+    public GameObject objectToShow;
 
     private Vector2 startPos;
     private Vector2 endPos;
@@ -93,6 +94,9 @@ public class PointerController : MonoBehaviour
 
         qteActive = true;
         BeginNextRoundDelay();
+        if (objectToShow != null)
+            objectToShow.SetActive(true);
+
     }
 
     private void BeginNextRoundDelay()

@@ -14,6 +14,7 @@ public class BreathQTE : MonoBehaviour
     public float increaseSpeed = 0.4f;
     public float decreasePerPress = 0.15f;
     public float maxValue = 1f;
+    public GameObject objectToHide;
 
     private float value;
     private bool active;
@@ -21,6 +22,7 @@ public class BreathQTE : MonoBehaviour
     void OnEnable()
     {
         StartQTE();
+
     }
 
     void Update()
@@ -46,6 +48,7 @@ public class BreathQTE : MonoBehaviour
             value += increaseSpeed * 1.5f * Time.deltaTime;
         }
 
+
         // ❌ เต็ม = แพ้ทันที
         if (value >= maxValue)
         {
@@ -62,6 +65,10 @@ public class BreathQTE : MonoBehaviour
 
         if (redLungImage != null)
             redLungImage.fillAmount = 0f;
+        if (objectToHide != null)
+            objectToHide.SetActive(false);
+
+
     }
 
     void PlayFailSfx()
