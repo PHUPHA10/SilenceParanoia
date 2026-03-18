@@ -18,6 +18,7 @@ public class HidingQTEManager : MonoBehaviour
 
     private hidingPlace currentHideSpot;
     public hidingPlace CurrentHideSpot => currentHideSpot;
+    public QTEGuideController guideController;
 
     private float hideTimer = 0f;
     private float qteTimer = 0f;
@@ -43,6 +44,7 @@ public class HidingQTEManager : MonoBehaviour
         foreach (var qte in qteGames)
             if (qte != null)
                 qte.SetActive(false);
+
     }
 
     void Update()
@@ -106,6 +108,7 @@ public class HidingQTEManager : MonoBehaviour
         if (qteRoot != null)
             qteRoot.SetActive(true);
 
+        guideController.ShowGuide();
         SwitchQTE();
     }
 

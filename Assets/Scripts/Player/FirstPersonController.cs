@@ -60,14 +60,6 @@ namespace StarterAssets
         public string crouchParam = "isCrouching";
 
 
-        // internal
-        private bool isCrouching = false;
-        private float currentHeight;
-        private Vector3 currentCenter;
-        private float targetHeight;
-        private Vector3 targetCenter;
-        private float cameraTargetY;
-        private float velocityHeight;
 
         // cinemachine
         private float _cinemachineTargetPitch;
@@ -77,8 +69,7 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
-        PlayerInput playerInput;
-        InputAction crouchaction;
+
 
 
         // timeout deltatime
