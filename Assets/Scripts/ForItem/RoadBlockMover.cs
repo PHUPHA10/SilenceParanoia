@@ -12,25 +12,11 @@ public class RoadBlockMover : MonoBehaviour
 
         if (transform.position.z <= recycleZ)
         {
-            float maxZ = GetMaxZPosition();
             Vector3 pos = transform.position;
-            pos.z = maxZ + blockLength;
+
+            pos.z += blockLength; // ✅ ขยับทีละบล็อก
+
             transform.position = pos;
         }
-    }
-
-    float GetMaxZPosition()
-    {
-        RoadBlockMover[] blocks = FindObjectsOfType<RoadBlockMover>();
-
-        float maxZ = float.MinValue;
-
-        foreach (var block in blocks)
-        {
-            if (block.transform.position.z > maxZ)
-                maxZ = block.transform.position.z;
-        }
-
-        return maxZ;
     }
 }
