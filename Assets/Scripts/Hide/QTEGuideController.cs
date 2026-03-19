@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class QTEGuideController : MonoBehaviour
 {
@@ -14,18 +14,19 @@ public class QTEGuideController : MonoBehaviour
 
     private void Start()
     {
-        guidePanel.SetActive(false);
+
     }
 
     public void ShowGuide()
     {
         guidePanel.SetActive(true);
-        Time.timeScale = 0f;
+
 
         MicrophoneInput.StopMic();
-
+        Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
         DisableCanvases();
         ShowPage1();
     }

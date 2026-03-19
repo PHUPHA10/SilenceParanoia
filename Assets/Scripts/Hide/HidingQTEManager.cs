@@ -34,21 +34,24 @@ public class HidingQTEManager : MonoBehaviour
             return;
         }
         Instance = this;
+
     }
 
     void Start()
     {
+        IsQteActive = false; // 🔥 เพิ่มบรรทัดนี้
+
         if (qteRoot != null)
             qteRoot.SetActive(false);
 
         foreach (var qte in qteGames)
             if (qte != null)
                 qte.SetActive(false);
-
     }
 
     void Update()
     {
+        // ยังไม่ได้แอบ → รีเซ็ต timer
         if (currentHideSpot == null || !currentHideSpot.IsHiding)
         {
             hideTimer = 0f;
@@ -61,23 +64,26 @@ public class HidingQTEManager : MonoBehaviour
             hideTimer += Time.deltaTime;
 
             if (hideTimer >= showDelay)
+            {
                 ActivateQTE();
+            }
         }
         else
         {
             qteTimer += Time.deltaTime;
 
             if (qteTimer >= switchInterval)
+            {
                 SwitchQTE();
+            }
         }
     }
-
 
     public void RegisterHideSpot(hidingPlace spot)
     {
 
         ForceStopQTE();
-
+        IsQteActive = false;
         currentHideSpot = spot;
         hideTimer = 0f;
         qteTimer = 0f;
@@ -102,13 +108,13 @@ public class HidingQTEManager : MonoBehaviour
 
     void ActivateQTE()
     {
+        guideController.ShowGuide();
         IsQteActive = true;
         qteTimer = 0f;
 
         if (qteRoot != null)
             qteRoot.SetActive(true);
 
-        guideController.ShowGuide();
         SwitchQTE();
     }
 
