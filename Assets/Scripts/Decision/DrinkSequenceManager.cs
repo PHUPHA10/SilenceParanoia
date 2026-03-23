@@ -15,6 +15,7 @@ public class DrinkSequenceManager : MonoBehaviour
 
     [Header("Objects To Disable During Video")]
     public List<GameObject> objectsToDisable;
+    public AudioSource gameAudio;
 
     [Header("Next Scene")]
     public string nextSceneName = "MainMenu"; // ใส่ชื่อซีนที่ต้องการโหลด
@@ -26,6 +27,8 @@ public class DrinkSequenceManager : MonoBehaviour
 
     IEnumerator DrinkSequence()
     {
+        if (gameAudio != null)
+            gameAudio.enabled = false;
         // ล็อก ESC ตั้งแต่เริ่ม sequence
         PauseMenuManager.IsVideoPlaying = true;
 

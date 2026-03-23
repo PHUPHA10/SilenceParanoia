@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using StarterAssets;
+using UnityEngine.Playables;
 
 public class TaxiChoiceManager : MonoBehaviour
 {
@@ -15,7 +16,10 @@ public class TaxiChoiceManager : MonoBehaviour
     public Animator playerAnimator;
     public DrinkSequenceManager drinkSequenceManager;
     public CarLookController carLookController;
-
+    public PlayableDirector timeline;
+    [Header("Cameras")]
+    public GameObject playerCamera;
+    public GameObject timelineCamera;
 
     void Start()
     {
@@ -42,14 +46,16 @@ public class TaxiChoiceManager : MonoBehaviour
 
     public void ChooseDrinkWater()
     {
-
-
-        if (waterBottleInHand != null)
-            waterBottleInHand.SetActive(true);
-        if (playerAnimator != null)
-            playerAnimator.SetTrigger("Drink");
         if (drinkSequenceManager != null)
             drinkSequenceManager.StartDrinkSequence();
+
+        // 🔁 สลับกล้อง
+        if (playerCamera != null) playerCamera.SetActive(false);
+        if (timelineCamera != null) timelineCamera.SetActive(true);
+
+        // ▶️ เล่น Timeline
+        timeline.time = 0;
+        timeline.Play();
 
         CloseAllChoices();
     }

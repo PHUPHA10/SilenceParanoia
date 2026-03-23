@@ -12,6 +12,7 @@ public class PauseMenuManager : MonoBehaviour
 
     [Header("Canvases To Disable When Paused")]
     public List<GameObject> canvasesToDisable;
+    public AudioSource gameAudio;
 
     public static bool IsPaused = false;
     public static bool IsVideoPlaying = false; // เพิ่มบรรทัดนี้
@@ -45,6 +46,8 @@ public class PauseMenuManager : MonoBehaviour
         {
             canvas.SetActive(false);
         }
+        if (gameAudio != null)
+            gameAudio.enabled = false;
 
         IsPaused = true;
 
@@ -69,6 +72,8 @@ public class PauseMenuManager : MonoBehaviour
                 canvas.SetActive(true);
         }
 
+        if (gameAudio != null)
+            gameAudio.enabled = true;
         IsPaused = false;
         Time.timeScale = 1f;
 
