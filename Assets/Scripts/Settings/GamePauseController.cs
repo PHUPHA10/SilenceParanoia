@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseMenuManager : MonoBehaviour
+public class GamePauseController : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject settingsRoot;
@@ -19,6 +19,7 @@ public class PauseMenuManager : MonoBehaviour
 
     void Start()
     {
+        // 🎮 เริ่มเกม = ล็อคเมาส์
         LockCursor();
     }
 
