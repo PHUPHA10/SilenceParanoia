@@ -58,7 +58,6 @@ public class PauseMenuManager : MonoBehaviour
         if (playerController != null) playerController.enabled = false;
         if (mouseLook != null) mouseLook.enabled = false;
 
-        // 🔓 ปลดเมาส์ตอน Pause
         UnlockCursor();
     }
 
@@ -120,6 +119,14 @@ public class PauseMenuManager : MonoBehaviour
     public void ExitToMainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+
+        if (SceneLoader.Instance != null)
+        {
+            SceneLoader.Instance.LoadScene("MainMenu");
+        }
+        else
+        {
+            Debug.LogWarning("SceneLoader not found!");
+        }
     }
 }

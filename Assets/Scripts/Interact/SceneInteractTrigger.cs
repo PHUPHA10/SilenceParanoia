@@ -13,7 +13,7 @@ public class SceneInteractTrigger : MonoBehaviour, IInteractable
     {
         if (SceneLoader.Instance != null)
         {
-            SceneLoader.Instance.LoadScene("LastScene");
+            SceneLoader.Instance.LoadScene("Lastscene");
         }
         else
         {

@@ -11,10 +11,11 @@ public class SceneLoader : MonoBehaviour
     public RectTransform spinner;
 
     [Header("Settings")]
-    public float spinSpeed = 200f;
+    public float spinSpeed = 180f;
 
     void Awake()
     {
+        // 🔥 Singleton กันซ้ำ
         if (Instance == null)
         {
             Instance = this;
@@ -26,13 +27,24 @@ public class SceneLoader : MonoBehaviour
             return;
         }
 
-        loadingPanel.SetActive(false);
+        if (loadingPanel == null)
+        {
+            loadingPanel = GameObject.Find("LoadingPanel");
+        }
+
+        if (spinner == null && loadingPanel != null)
+        {
+            spinner = loadingPanel.GetComponentInChildren<RectTransform>();
+        }
+
+        if (loadingPanel != null)
+            loadingPanel.SetActive(false);
     }
 
     void Update()
     {
 
-        if (loadingPanel.activeSelf && spinner != null)
+        if (loadingPanel != null && loadingPanel.activeSelf && spinner != null)
         {
             spinner.Rotate(Vector3.forward * -spinSpeed * Time.deltaTime);
         }
@@ -45,8 +57,8 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator LoadSceneRoutine(string sceneName)
     {
-
-        loadingPanel.SetActive(true);
+        if (loadingPanel != null)
+            loadingPanel.SetActive(true);
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
@@ -55,10 +67,9 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
 
-
         yield return null;
 
-
-        loadingPanel.SetActive(false);
+        if (loadingPanel != null)
+            loadingPanel.SetActive(false);
     }
 }
