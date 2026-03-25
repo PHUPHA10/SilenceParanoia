@@ -1,4 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -9,42 +11,54 @@ public class SceneLoader : MonoBehaviour
     public RectTransform spinner;
 
     [Header("Settings")]
-    public float spinSpeed = 180f;
-
-    bool isLoading = false;
+    public float spinSpeed = 200f;
 
     void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
         else
+        {
             Destroy(gameObject);
+            return;
+        }
 
-        if (loadingPanel != null)
-            loadingPanel.SetActive(false);
+        loadingPanel.SetActive(false);
     }
 
     void Update()
     {
-        if (isLoading && spinner != null)
+
+        if (loadingPanel.activeSelf && spinner != null)
         {
-            spinner.Rotate(0f, 0f, -spinSpeed * Time.unscaledDeltaTime);
+            spinner.Rotate(Vector3.forward * -spinSpeed * Time.deltaTime);
         }
     }
 
-    public void ShowLoading()
+    public void LoadScene(string sceneName)
     {
-        isLoading = true;
-
-        if (loadingPanel != null)
-            loadingPanel.SetActive(true);
+        StartCoroutine(LoadSceneRoutine(sceneName));
     }
 
-    public void HideLoading()
+    IEnumerator LoadSceneRoutine(string sceneName)
     {
-        isLoading = false;
 
-        if (loadingPanel != null)
-            loadingPanel.SetActive(false);
+        loadingPanel.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+
+        while (!operation.isDone)
+        {
+            yield return null;
+        }
+
+
+        yield return null;
+
+
+        loadingPanel.SetActive(false);
     }
 }

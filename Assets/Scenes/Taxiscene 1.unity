@@ -11115,6 +11115,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingPanel: {fileID: 1886399825}
   spinner: {fileID: 1063318299}
+  fadeCanvas: {fileID: 0}
+  fadeDuration: 0.5
   spinSpeed: 180
 --- !u!4 &531238563
 Transform:
@@ -18794,7 +18796,7 @@ MonoBehaviour:
     textColor: {r: 1, g: 1, b: 1, a: 1}
     displayDuration: 2
     delayAfter: 3.7
-  nextSceneName: Lastscene
+  nextSceneName: Lobby
 --- !u!4 &940292732
 Transform:
   m_ObjectHideFlags: 0
@@ -32999,7 +33001,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 0.44065508, g: 0.49803922, b: 0.6666667, a: 1}
+  m_Color: {r: 0.27549842, g: 0.30428138, b: 0.38679248, a: 1}
   m_Intensity: 0.05
   m_Range: 10
   m_SpotAngle: 30
@@ -41723,11 +41725,11 @@ AudioSource:
   m_GameObject: {fileID: 2114501641}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1858974884305949164, guid: 6ef7c1bddc3840047b5a6d8ddc890324, type: 2}
   m_audioClip: {fileID: 8300000, guid: 2723813e79bb93b43b3d4502856daddd, type: 3}
   m_Resource: {fileID: 8300000, guid: 2723813e79bb93b43b3d4502856daddd, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.814
+  m_Volume: 0.29
   m_Pitch: 1
   Loop: 1
   Mute: 0

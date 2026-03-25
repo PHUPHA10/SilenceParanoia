@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class AutoSaveManager : MonoBehaviour
 {
@@ -30,18 +31,28 @@ public class AutoSaveManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        StartCoroutine(WaitAndSave());
+    }
+
+    IEnumerator WaitAndSave()
+    {
+        yield return null;
+
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         if (player != null)
         {
             AutoSave(player.transform);
         }
+        else
+        {
+            Debug.LogWarning("Player not found for AutoSave");
+        }
     }
 
     void AutoSave(Transform player)
     {
         SaveSystem.SaveGame(player.position, SceneManager.GetActiveScene().name);
-
         Debug.Log("Auto Saved");
     }
 }

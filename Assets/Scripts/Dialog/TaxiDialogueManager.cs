@@ -36,7 +36,7 @@ public class TaxiDialogueManager : MonoBehaviour
     public DialogueLine[] stopCarLines;
 
     [Header("Next Scene")]
-    public string nextSceneName = "Lastscene";
+    public string nextSceneName = "Lobby";
 
     void Start()
     {
@@ -130,7 +130,14 @@ public class TaxiDialogueManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
+        if (SceneLoader.Instance != null)
+        {
+            SceneLoader.Instance.LoadScene("MainMenu");
+        }
+        else
+        {
+            Debug.LogWarning("SceneLoader not found!");
+        }
     }
 
     IEnumerator DialogueAndLoadScene()
@@ -158,8 +165,15 @@ public class TaxiDialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
 
         yield return new WaitForSeconds(1.5f);
-        SceneLoader.Instance.ShowLoading();
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Lastscene");
+
+        if (SceneLoader.Instance != null)
+        {
+            SceneLoader.Instance.LoadScene("Lobby");
+        }
+        else
+        {
+            Debug.LogWarning("SceneLoader not found!");
+        }
     }
 
 }

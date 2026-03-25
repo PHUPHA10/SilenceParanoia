@@ -1,11 +1,17 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
     public void NewGame()
     {
-        SceneManager.LoadScene("Taxiscene");
+        if (SceneLoader.Instance != null)
+        {
+            SceneLoader.Instance.LoadScene("Taxiscene");
+        }
+        else
+        {
+            Debug.LogWarning("SceneLoader not found!");
+        }
     }
 
     public void LoadGame()
@@ -14,7 +20,18 @@ public class MainMenu : MonoBehaviour
 
         if (data != null)
         {
-            SceneManager.LoadScene(data.sceneName);
+            if (SceneLoader.Instance != null)
+            {
+                SceneLoader.Instance.LoadScene(data.sceneName);
+            }
+            else
+            {
+                Debug.LogWarning("SceneLoader not found!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No save data found!");
         }
     }
 

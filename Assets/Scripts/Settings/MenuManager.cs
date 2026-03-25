@@ -1,5 +1,4 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
@@ -29,7 +28,14 @@ public class MenuManager : MonoBehaviour
 
     public void LoadGame()
     {
-        SceneManager.LoadScene("LastScene");
+        if (SceneLoader.Instance != null)
+       {
+            SceneLoader.Instance.LoadScene(loadGameScene);
+        }
+        else
+        {
+            Debug.LogWarning("SceneLoader not found!");
+        }
     }
 
     public void QuitGame()

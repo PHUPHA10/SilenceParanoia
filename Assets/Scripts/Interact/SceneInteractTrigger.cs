@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SceneInteractTrigger : MonoBehaviour, IInteractable
 {
@@ -13,8 +12,12 @@ public class SceneInteractTrigger : MonoBehaviour, IInteractable
     public void Interact()
     {
         if (SceneLoader.Instance != null)
-            SceneLoader.Instance.ShowLoading();
-
-        SceneManager.LoadScene(sceneToLoad);
+        {
+            SceneLoader.Instance.LoadScene("LastScene");
+        }
+        else
+        {
+            Debug.LogWarning("SceneLoader not found!");
+        }
     }
 }
