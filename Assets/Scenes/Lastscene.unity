@@ -21942,7 +21942,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingPanel: {fileID: 938541920}
   spinner: {fileID: 1809616244}
-  spinSpeed: 180
+  spinSpeed: 20
 --- !u!4 &956832830
 Transform:
   m_ObjectHideFlags: 0
