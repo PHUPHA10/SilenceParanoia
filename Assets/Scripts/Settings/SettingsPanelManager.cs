@@ -5,7 +5,6 @@ public class SettingsPanelManager : MonoBehaviour
     public GameObject audioPanel;
     public GameObject graphicsPanel;
     public GameObject controlsPanel;
-
     void OnEnable()
     {
         ShowAudio();
