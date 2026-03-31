@@ -6,6 +6,8 @@ public class AutoSaveManager : MonoBehaviour
 {
     static AutoSaveManager instance;
 
+    public static bool GameStarted = false;
+
     void Awake()
     {
         if (instance == null)
@@ -31,6 +33,9 @@ public class AutoSaveManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (!GameStarted)
+            return;
+
         StartCoroutine(WaitAndSave());
     }
 

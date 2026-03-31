@@ -10,8 +10,7 @@ public class SoundQTE : MonoBehaviour
     public float sensitivity = 0.2f;
 
     [Header("UI")]
-    public TMP_Text dbText;
-    public TMP_Text hintText;
+
     public Image emptyImage;
     public Image fullImage;
 
@@ -33,19 +32,23 @@ public class SoundQTE : MonoBehaviour
 
     void OnEnable()
     {
+        //ผู้เล่นไม่อนุญาติ
+        if (!MicPermissionManager.AllowMic)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        //ไม่มีไมค์จริง
+        if (Microphone.devices.Length == 0)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        // ใช้งานได้
         active = true;
         MicrophoneInput.StartMic();
-
-
-        gunTimer = 0f;
-
-        if (hintText != null)
-            hintText.text = "ห้ามส่งเสียงเด็ดขาด...";
-
-        currentFill = 0f;
-
-        if (fullImage != null)
-            fullImage.fillAmount = 0f;
     }
 
     void OnDisable()
@@ -69,8 +72,6 @@ public class SoundQTE : MonoBehaviour
         float db = 20f * Mathf.Log10(loudness / sensitivity);
         db = Mathf.Clamp(db, -60f, 0f);
 
-        if (dbText != null)
-            dbText.text = $"ระดับเสียง: {Mathf.RoundToInt(db)} dB";
 
         float targetFill = Mathf.InverseLerp(minDB, failDB, db);
 

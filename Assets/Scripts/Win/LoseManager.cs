@@ -96,6 +96,9 @@ public class LoseManager : MonoBehaviour
 
     void OnVideoEnd(VideoPlayer vp)
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         if (!string.IsNullOrEmpty(nextSceneName))
             SceneManager.LoadScene(nextSceneName);
     }

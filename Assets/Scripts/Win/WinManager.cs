@@ -105,6 +105,9 @@ public class HideWinManager : MonoBehaviour
 
     void OnVideoEnd(VideoPlayer vp)
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         if (videoAudio != null)
             videoAudio.Stop();
 

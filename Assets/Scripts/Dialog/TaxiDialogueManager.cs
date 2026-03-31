@@ -30,13 +30,18 @@ public class TaxiDialogueManager : MonoBehaviour
     public DialogueLine[] refuseLines;
 
     TaxiChoiceManager choiceManager;
+
     [Header("No Stop Car Dialogue")]
     public DialogueLine[] noStopLines;
+
     [Header("Stop Car Dialogue")]
     public DialogueLine[] stopCarLines;
 
     [Header("Next Scene")]
     public string nextSceneName = "Lobby";
+
+    // 🔥 เพิ่ม
+    bool skipRequested = false;
 
     void Start()
     {
@@ -46,6 +51,15 @@ public class TaxiDialogueManager : MonoBehaviour
         choiceManager = FindObjectOfType<TaxiChoiceManager>();
 
         StartPhase1();
+    }
+
+    // 🔥 เพิ่ม
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            skipRequested = true;
+        }
     }
 
     public void StartPhase1()
@@ -59,6 +73,23 @@ public class TaxiDialogueManager : MonoBehaviour
         Debug.Log("Start Refuse Phase");
         StopAllCoroutines();
         StartCoroutine(DialogueSequence(refuseLines, false));
+    }
+
+    IEnumerator WaitOrSkip(float duration)
+    {
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            if (skipRequested)
+            {
+                skipRequested = false;
+                break;
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 
     IEnumerator DialogueSequence(DialogueLine[] targetLines, bool showWaterChoice)
@@ -76,11 +107,11 @@ public class TaxiDialogueManager : MonoBehaviour
             dialogueText.color = line.textColor;
             dialogueText.gameObject.SetActive(true);
 
-            yield return new WaitForSeconds(Mathf.Max(0.1f, line.displayDuration));
+            yield return StartCoroutine(WaitOrSkip(Mathf.Max(0.1f, line.displayDuration)));
 
             dialogueText.gameObject.SetActive(false);
 
-            yield return new WaitForSeconds(Mathf.Max(0.1f, line.delayAfter));
+            yield return StartCoroutine(WaitOrSkip(Mathf.Max(0.1f, line.delayAfter)));
         }
 
         dialoguePanel.SetActive(false);
@@ -92,6 +123,7 @@ public class TaxiDialogueManager : MonoBehaviour
         else
             choiceManager?.ShowStopCarChoice();
     }
+
     public void StartNoStopPhase()
     {
         StopAllCoroutines();
@@ -119,11 +151,11 @@ public class TaxiDialogueManager : MonoBehaviour
             dialogueText.color = line.textColor;
             dialogueText.gameObject.SetActive(true);
 
-            yield return new WaitForSeconds(Mathf.Max(0.1f, line.displayDuration));
+            yield return StartCoroutine(WaitOrSkip(Mathf.Max(0.1f, line.displayDuration)));
 
             dialogueText.gameObject.SetActive(false);
 
-            yield return new WaitForSeconds(Mathf.Max(0.1f, line.delayAfter));
+            yield return StartCoroutine(WaitOrSkip(Mathf.Max(0.1f, line.delayAfter)));
         }
 
         dialoguePanel.SetActive(false);
@@ -155,11 +187,11 @@ public class TaxiDialogueManager : MonoBehaviour
             dialogueText.color = line.textColor;
             dialogueText.gameObject.SetActive(true);
 
-            yield return new WaitForSeconds(Mathf.Max(0.1f, line.displayDuration));
+            yield return StartCoroutine(WaitOrSkip(Mathf.Max(0.1f, line.displayDuration)));
 
             dialogueText.gameObject.SetActive(false);
 
-            yield return new WaitForSeconds(Mathf.Max(0.1f, line.delayAfter));
+            yield return StartCoroutine(WaitOrSkip(Mathf.Max(0.1f, line.delayAfter)));
         }
 
         dialoguePanel.SetActive(false);
@@ -175,5 +207,4 @@ public class TaxiDialogueManager : MonoBehaviour
             Debug.LogWarning("SceneLoader not found!");
         }
     }
-
 }

@@ -31190,7 +31190,7 @@ MonoBehaviour:
   - {fileID: 208831151}
   - {fileID: 1690160442}
   - {fileID: 1686052764}
-  nextSceneName: MainMenu
+  nextSceneName: MainMenuTest
 --- !u!4 &1407238759
 Transform:
   m_ObjectHideFlags: 0
@@ -44947,7 +44947,7 @@ MonoBehaviour:
   - {fileID: 208831151}
   - {fileID: 1690160442}
   - {fileID: 1686052764}
-  nextSceneName: MainMenu
+  nextSceneName: MainMenuTest
 --- !u!4 &2020363482
 Transform:
   m_ObjectHideFlags: 0

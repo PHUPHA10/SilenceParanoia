@@ -4,6 +4,8 @@ public class MainMenu : MonoBehaviour
 {
     public void NewGame()
     {
+        AutoSaveManager.GameStarted = true;
+
         if (SceneLoader.Instance != null)
         {
             SceneLoader.Instance.LoadScene("Taxiscene");

@@ -19,20 +19,64 @@ public class GraphicsSettings : MonoBehaviour
     private Resolution[] resolutions;
     private List<Resolution> uniqueResolutions = new List<Resolution>();
 
+    // 🔥 เพิ่มตรงนี้
+    void Awake()
+    {
+        ApplySettings(); // apply ทันทีตอนเข้า scene
+    }
+
     void Start()
     {
-
         float brightnessValue = PlayerPrefs.GetFloat("Brightness", 1f);
         brightnessSlider.value = brightnessValue;
         SetBrightness(brightnessValue);
-
 
         bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
         fullscreenToggle.isOn = isFullscreen;
         Screen.fullScreen = isFullscreen;
 
-
         SetupResolutions();
+    }
+
+    // 🔥 เพิ่มตรงนี้
+    void ApplySettings()
+    {
+        float brightnessValue = PlayerPrefs.GetFloat("Brightness", 1f);
+        SetBrightness(brightnessValue);
+
+        bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
+        Screen.fullScreen = isFullscreen;
+
+        int savedIndex = PlayerPrefs.GetInt("ResolutionIndex", -1);
+        if (savedIndex != -1)
+        {
+            resolutions = Screen.resolutions;
+            uniqueResolutions.Clear();
+
+            for (int i = 0; i < resolutions.Length; i++)
+            {
+                bool exists = false;
+
+                for (int j = 0; j < uniqueResolutions.Count; j++)
+                {
+                    if (uniqueResolutions[j].width == resolutions[i].width &&
+                        uniqueResolutions[j].height == resolutions[i].height)
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists)
+                    uniqueResolutions.Add(resolutions[i]);
+            }
+
+            if (savedIndex >= 0 && savedIndex < uniqueResolutions.Count)
+            {
+                Resolution chosenRes = uniqueResolutions[savedIndex];
+                Screen.SetResolution(chosenRes.width, chosenRes.height, isFullscreen);
+            }
+        }
     }
 
     void SetupResolutions()
@@ -83,7 +127,6 @@ public class GraphicsSettings : MonoBehaviour
         SetResolution(savedIndex);
     }
 
-
     public void SetBrightness(float value)
     {
         float maxDarkness = 0.5f;
@@ -98,14 +141,12 @@ public class GraphicsSettings : MonoBehaviour
         PlayerPrefs.SetFloat("Brightness", value);
     }
 
-
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
         PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
     }
 
-    // ===== Resolution =====
     public void SetResolution(int index)
     {
         if (index < 0 || index >= uniqueResolutions.Count)
