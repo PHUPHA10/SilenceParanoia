@@ -111,5 +111,7 @@ public class NotificationDelay : MonoBehaviour
 
         if (chatPanel != null)
             chatPanel.SetActive(true);
+
     }
+
 }

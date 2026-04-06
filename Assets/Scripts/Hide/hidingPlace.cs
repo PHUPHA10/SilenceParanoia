@@ -37,6 +37,11 @@ public class hidingPlace : MonoBehaviour, IInteractable
     public float stepInterval = 1.2f;
     private Coroutine footstepRoutine;
 
+    // 🔫 เพิ่มส่วนนี้
+    [Header("Gunshot Sound")]
+    public AudioSource gunshotSource;
+    public AudioClip gunshotClip;
+
     [Header("Enemy Spawn")]
     public EnemySpawnerHide enemySpawner;
     private Transform hideTransform;
@@ -169,14 +174,11 @@ public class hidingPlace : MonoBehaviour, IInteractable
         if (footstepSource != null)
             footstepSource.Stop();
 
-
         if (enemySpawner != null && hideTransform != null)
         {
             enemySpawner.SpawnEnemyNearPlayer(hideTransform);
         }
-
     }
-
 
     IEnumerator FootstepSequence()
     {
@@ -185,6 +187,10 @@ public class hidingPlace : MonoBehaviour, IInteractable
 
         while (isHiding)
         {
+            // 🔫 เพิ่มสุ่มเสียงยิง
+            if (Random.value < 0.3f)
+                PlayGunshot();
+
             PlayFootstep(mediumVolume);
             yield return new WaitForSeconds(stepInterval);
 
@@ -207,4 +213,12 @@ public class hidingPlace : MonoBehaviour, IInteractable
         footstepSource.PlayOneShot(footstepClip);
     }
 
+    public void PlayGunshot()
+    {
+        if (gunshotSource != null && gunshotClip != null)
+        {
+            gunshotSource.pitch = Random.Range(0.9f, 1.1f);
+            gunshotSource.PlayOneShot(gunshotClip);
+        }
+    }
 }

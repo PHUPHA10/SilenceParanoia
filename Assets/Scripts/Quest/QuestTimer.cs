@@ -4,6 +4,8 @@ using UnityEngine.Events;
 using System.Collections;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
+using StarterAssets;
+
 
 
 public class QuestTimer : MonoBehaviour
@@ -51,7 +53,6 @@ public class QuestTimer : MonoBehaviour
     [Header("Fail Video")]
     public UnityEngine.Video.VideoPlayer failVideo;
     public GameObject[] gameObjectsToDisable;
-
 
     public bool IsQuestRunning => isRunning;
 
@@ -151,29 +152,36 @@ public class QuestTimer : MonoBehaviour
             doorToOpen.OpenDoorByQuest();
         }
 
-        if (HidingQTEManager.Instance == null ||
-            HidingQTEManager.Instance.CurrentHideSpot == null)
+        if (failVideo != null)
         {
-            if (failVideo != null)
+            failVideo.gameObject.SetActive(true);
+
+            failVideo.loopPointReached += OnVideoFinished;
+
+            failVideo.Play();
+
+            // 🔒 ปิดการควบคุมกล้อง
+            FirstPersonController controller = FindObjectOfType<FirstPersonController>();
+            if (controller != null)
             {
-                failVideo.gameObject.SetActive(true);
-
-                // สมัคร event ก่อนเล่น
-                failVideo.loopPointReached += OnVideoFinished;
-
-                failVideo.Play();
-
-                foreach (var go in gameObjectsToDisable)
-                    if (go != null && go != failVideo.gameObject)
-                        go.SetActive(false);
+                controller.enabled = false;
             }
+
+            foreach (var go in gameObjectsToDisable)
+                if (go != null && go != failVideo.gameObject)
+                    go.SetActive(false);
         }
         void OnVideoFinished(VideoPlayer vp)
         {
             // ป้องกันเรียกซ้ำ
             vp.loopPointReached -= OnVideoFinished;
+            FirstPersonController controller = FindObjectOfType<FirstPersonController>();
+            if (controller != null)
+            {
+                controller.enabled = true;
+            }
+            SceneManager.LoadScene("MainMenu");  
 
-            SceneManager.LoadScene("Game0");  
         }
 
         OnQuestTimeEnd?.Invoke();

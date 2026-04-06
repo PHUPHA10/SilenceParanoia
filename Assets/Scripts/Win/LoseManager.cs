@@ -8,16 +8,16 @@ public class LoseManager : MonoBehaviour
     public VideoPlayer loseVideoPlayer;
 
     [Header("Video Audio")]
-    public AudioSource videoAudioSource;   // 🔊 ควบคุมเสียงวิดีโอ
+    public AudioSource videoAudioSource;
     [Range(0f, 1f)]
-    public float videoVolume = 0.6f;        // ปรับความดังได้จาก Inspector
+    public float videoVolume = 0.6f;
 
     [Header("Disable On Lose")]
     public Canvas[] canvasesToDisable;
     public GameObject[] gameObjectsToDisable;
 
     [Header("Scene")]
-    public string nextSceneName = "Game0";
+    public string nextSceneName = "MainMenu";
 
     bool isPlaying = false;
 
@@ -28,7 +28,6 @@ public class LoseManager : MonoBehaviour
             loseVideoPlayer.loopPointReached += OnVideoEnd;
             loseVideoPlayer.gameObject.SetActive(false);
 
-            // 🔊 บังคับใช้ AudioSource
             loseVideoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
 
             if (videoAudioSource != null)
@@ -47,11 +46,9 @@ public class LoseManager : MonoBehaviour
 
         isPlaying = true;
 
-        // ปิด QTE
         if (HidingQTEManager.Instance != null)
             HidingQTEManager.Instance.ForceStopQTE();
 
-        // ปิด UI / ระบบเกม (ห้ามปิด object ที่มี VideoPlayer / AudioSource)
         foreach (var c in canvasesToDisable)
             if (c != null) c.enabled = false;
 
@@ -63,21 +60,18 @@ public class LoseManager : MonoBehaviour
         Cursor.visible = false;
         Time.timeScale = 1f;
 
-        // 🎥 ใช้กล้องที่ active อยู่จริง (หลังเด้งจากที่ซ่อน)
         Camera activeCam = GetActiveCamera();
         if (activeCam != null && loseVideoPlayer.renderMode == VideoRenderMode.CameraNearPlane)
         {
             loseVideoPlayer.targetCamera = activeCam;
         }
 
-        // 🔊 ตั้ง volume ก่อนเล่น
         if (videoAudioSource != null)
         {
             videoAudioSource.volume = videoVolume;
             videoAudioSource.enabled = true;
         }
 
-        // 🎬 เล่นวิดีโอ
         loseVideoPlayer.gameObject.SetActive(true);
         loseVideoPlayer.clip = clip;
         loseVideoPlayer.Play();
@@ -96,6 +90,9 @@ public class LoseManager : MonoBehaviour
 
     void OnVideoEnd(VideoPlayer vp)
     {
+
+        PlayerPrefs.Save();
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 

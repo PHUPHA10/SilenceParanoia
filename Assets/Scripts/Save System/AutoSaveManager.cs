@@ -33,6 +33,10 @@ public class AutoSaveManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+
+        if (scene.name == "MainMenu")
+            return;
+
         if (!GameStarted)
             return;
 
@@ -58,6 +62,9 @@ public class AutoSaveManager : MonoBehaviour
     void AutoSave(Transform player)
     {
         SaveSystem.SaveGame(player.position, SceneManager.GetActiveScene().name);
+
+        PlayerPrefs.SetInt("HasSave", 1);
+
         Debug.Log("Auto Saved");
     }
 }

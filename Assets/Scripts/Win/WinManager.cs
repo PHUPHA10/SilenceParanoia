@@ -105,6 +105,9 @@ public class HideWinManager : MonoBehaviour
 
     void OnVideoEnd(VideoPlayer vp)
     {
+        PlayerPrefs.SetInt("GameCompleted", 1);
+        PlayerPrefs.Save();
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 

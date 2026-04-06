@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Pickup
   - Wall
+  - Erase
   layers:
   - Default
   - TransparentFX
