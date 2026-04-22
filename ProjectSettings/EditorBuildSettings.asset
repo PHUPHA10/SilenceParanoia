@@ -8,9 +8,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Start.unity
     guid: d0c440cba089bf341ae37af0fa039160
-  - enabled: 0
-    path: Assets/Scenes/Game0.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 939a3a7a6129c2545a465e679528f74f
@@ -18,23 +15,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Taxiscene.unity
     guid: a9e5a3ff7bed9a049b58c9dd7d7090c5
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
-    guid: 58b3cc1e11b17c1498586f09bec8b047
+    path: Assets/Scenes/Condo Niti.unity
+    guid: 128868f6deb470c4e819dd7d1abc2d4b
   - enabled: 1
     path: Assets/Scenes/Lastscene.unity
     guid: 00abdd4fb44ecb544a93df07088adb1f
-  - enabled: 0
-    path: Assets/Scenes/MainMenuTest.unity
-    guid: 197a8aa87d4f9994f8a883e8d24899f0
-  - enabled: 0
-    path: Assets/Scenes/TaxisceneTest.unity
-    guid: d9b283c76036eb14483e80b33d73b330
-  - enabled: 0
-    path: Assets/Scenes/LobbyTest.unity
-    guid: 994b08d793c0f7c4195e9742c39c78fd
-  - enabled: 0
-    path: Assets/Scenes/LastsceneTest.unity
-    guid: 9ae020883363a6b4cbde60db324c66e3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -54,6 +54,7 @@ public class QuestTimer : MonoBehaviour
     public UnityEngine.Video.VideoPlayer failVideo;
     public GameObject[] gameObjectsToDisable;
 
+
     public bool IsQuestRunning => isRunning;
 
     public void StartQuest()
