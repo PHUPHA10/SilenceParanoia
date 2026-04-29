@@ -10278,7 +10278,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 473258154}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 541861476360ed44596c2657c5da1258, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 2f38aadbbb499564b9d6432e1881041a, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 7403551024386071759}
@@ -11509,7 +11509,7 @@ MonoBehaviour:
   gunshotSource: {fileID: 1811728452}
   gunshotClip: {fileID: 8300000, guid: d1aa98225c72d904184d2b673bdd2523, type: 3}
   enemySpawner: {fileID: 0}
-  loseVideoClip: {fileID: 32900000, guid: 39f6a457654021e4c8da880a6678d3e5, type: 3}
+  loseVideoClip: {fileID: 32900000, guid: d7a0cb862e7f5b144b6d781ef596798d, type: 3}
 --- !u!114 &519095809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15858,7 +15858,7 @@ MonoBehaviour:
   gunshotSource: {fileID: 1811728452}
   gunshotClip: {fileID: 8300000, guid: d1aa98225c72d904184d2b673bdd2523, type: 3}
   enemySpawner: {fileID: 0}
-  loseVideoClip: {fileID: 32900000, guid: bbc87863308677446a83db167c0f6bfe, type: 3}
+  loseVideoClip: {fileID: 32900000, guid: 14b0b265bfe51a14bbc016cf2cb1c70c, type: 3}
 --- !u!114 &676673378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30371,7 +30371,7 @@ MonoBehaviour:
   gunshotSource: {fileID: 1811728452}
   gunshotClip: {fileID: 8300000, guid: d1aa98225c72d904184d2b673bdd2523, type: 3}
   enemySpawner: {fileID: 0}
-  loseVideoClip: {fileID: 32900000, guid: dcc3e3ab5bb7bc841938039769be478f, type: 3}
+  loseVideoClip: {fileID: 32900000, guid: e7e32dfeee71ab74ebe5c2bce1adde64, type: 3}
 --- !u!114 &1394872324
 MonoBehaviour:
   m_ObjectHideFlags: 0
