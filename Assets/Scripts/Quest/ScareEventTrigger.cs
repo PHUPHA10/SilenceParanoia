@@ -91,6 +91,8 @@ public class CameraEventTrigger : MonoBehaviour
                 spawnPoint.position,
                 spawnPoint.rotation
             );
+
+            Destroy(npc, 15f);
         }
 
         if (npc != null && moveTarget != null)
@@ -131,11 +133,7 @@ public class CameraEventTrigger : MonoBehaviour
             float distance = direction.magnitude;
 
 
-            if (distance <= stopDistance)
-            {
-                Destroy(npc.gameObject);
-                yield break;
-            }
+            Destroy(npc.gameObject, 13f);
 
             direction.Normalize();
 
