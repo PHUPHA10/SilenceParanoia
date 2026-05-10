@@ -11,12 +11,17 @@ public class TaxiChoiceManager : MonoBehaviour
     [Header("Water Bottle In Hand")]
     public GameObject waterBottleInHand;
 
+    [Header("Choice Sound")]
+    public AudioSource choiceAudioSource;
+    public AudioClip choiceLoopSound;
+
     TaxiDialogueManager dialogueManager;
     FirstPersonController firstPersonController;
     public Animator playerAnimator;
     public DrinkSequenceManager drinkSequenceManager;
     public CarLookController carLookController;
     public PlayableDirector timeline;
+
     [Header("Cameras")]
     public GameObject playerCamera;
     public GameObject timelineCamera;
@@ -41,11 +46,15 @@ public class TaxiChoiceManager : MonoBehaviour
         if (drinkWaterPanel != null)
             drinkWaterPanel.SetActive(true);
 
+        PlayChoiceSound();
+
         LockPlayer();
     }
 
     public void ChooseDrinkWater()
     {
+        StopChoiceSound();
+
         if (drinkSequenceManager != null)
             drinkSequenceManager.StartDrinkSequence();
 
@@ -62,7 +71,7 @@ public class TaxiChoiceManager : MonoBehaviour
 
     public void ChooseRefuseWater()
     {
-
+        StopChoiceSound();
 
         CloseAllChoices();
         dialogueManager?.StartRefusePhase();
@@ -73,17 +82,23 @@ public class TaxiChoiceManager : MonoBehaviour
         if (stopCarPanel != null)
             stopCarPanel.SetActive(true);
 
+        PlayChoiceSound();
+
         LockPlayer();
     }
 
     public void ChooseStopCar()
     {
+        StopChoiceSound();
+
         CloseAllChoices();
         dialogueManager?.StartStopCarPhase();
     }
 
     public void ChooseNotStopCar()
     {
+        StopChoiceSound();
+
         dialogueManager?.StartNoStopPhase();
         CloseAllChoices();
     }
@@ -103,7 +118,9 @@ public class TaxiChoiceManager : MonoBehaviour
     {
         if (firstPersonController != null)
             firstPersonController.enabled = false;
-        if (carLookController != null) carLookController.lockLook = true;
+
+        if (carLookController != null)
+            carLookController.lockLook = true;
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -113,9 +130,29 @@ public class TaxiChoiceManager : MonoBehaviour
     {
         if (firstPersonController != null)
             firstPersonController.enabled = true;
-        if (carLookController != null) carLookController.lockLook = false;
+
+        if (carLookController != null)
+            carLookController.lockLook = false;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    void PlayChoiceSound()
+    {
+        if (choiceAudioSource != null && choiceLoopSound != null)
+        {
+            choiceAudioSource.clip = choiceLoopSound;
+            choiceAudioSource.loop = true;
+            choiceAudioSource.Play();
+        }
+    }
+
+    void StopChoiceSound()
+    {
+        if (choiceAudioSource != null)
+        {
+            choiceAudioSource.Stop();
+        }
     }
 }
