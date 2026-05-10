@@ -16638,10 +16638,11 @@ MonoBehaviour:
   npcPrefab: {fileID: 965031326}
   spawnPoint: {fileID: 1352677150}
   moveTarget: {fileID: 1256418340}
-  npcSpeed: 1.2
+  npcSpeed: 0.85
   stopDistance: 0.1
-  cinematicDuration: 15
+  cinematicDuration: 12
   otherTrigger: {fileID: 1225977597}
+  objectToDestroy: {fileID: 965031326}
   useCamera1: 0
   triggerOnce: 1
 --- !u!65 &948546710
@@ -16960,6 +16961,33 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3479651803557526494, guid: 3bbc4dbc352b9f946a9d00a6f9b21e90, type: 3}
   m_PrefabInstance: {fileID: 1017337547}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &965031327
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965031326}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 4
+  m_CollisionDetection: 0
 --- !u!1 &983445802
 GameObject:
   m_ObjectHideFlags: 0
@@ -17932,7 +17960,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3479651803557526494, guid: 3bbc4dbc352b9f946a9d00a6f9b21e90, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 965031327}
   m_SourcePrefab: {fileID: 100100000, guid: 3bbc4dbc352b9f946a9d00a6f9b21e90, type: 3}
 --- !u!1 &1025206120
 GameObject:
@@ -21114,10 +21145,11 @@ MonoBehaviour:
   npcPrefab: {fileID: 965031326}
   spawnPoint: {fileID: 1352677150}
   moveTarget: {fileID: 1256418340}
-  npcSpeed: 1.2
+  npcSpeed: 0.85
   stopDistance: 0.1
-  cinematicDuration: 13
+  cinematicDuration: 12
   otherTrigger: {fileID: 948546708}
+  objectToDestroy: {fileID: 965031326}
   useCamera1: 1
   triggerOnce: 1
 --- !u!1 &1226672603
@@ -23041,7 +23073,7 @@ Transform:
   m_GameObject: {fileID: 1352677149}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 73.392, y: 24.31, z: -92.803}
+  m_LocalPosition: {x: 72.288, y: 24.31, z: -92.452}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

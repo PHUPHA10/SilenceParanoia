@@ -28,6 +28,9 @@ public class CameraEventTrigger : MonoBehaviour
     [Header("Disable Other Trigger")]
     public GameObject otherTrigger;
 
+    [Header("Destroy Object After Cinematic")]
+    public GameObject objectToDestroy;
+
     [Header("Settings")]
     public bool useCamera1 = true;
     public bool triggerOnce = true;
@@ -113,6 +116,11 @@ public class CameraEventTrigger : MonoBehaviour
 
         if (playerLookScript != null)
             playerLookScript.enabled = true;
+
+        if (objectToDestroy != null)
+        {
+            Destroy(objectToDestroy.gameObject);
+        }
 
         if (triggerOnce)
             Destroy(gameObject);
