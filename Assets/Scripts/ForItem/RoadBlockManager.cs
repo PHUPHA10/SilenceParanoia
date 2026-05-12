@@ -3,17 +3,21 @@ using System.Collections.Generic;
 
 public class RoadBlockManager : MonoBehaviour
 {
-    public List<Transform> blocks; // ใส่ RoadBlock ทั้งหมด
+    public List<Transform> blocks;
     public float speed = 20f;
     public float blockLength = 125f;
     public float recycleZ = -150f;
 
     void Update()
     {
-        // เลื่อนทุก block
+        // เลื่อนแค่แกน Z
         foreach (var block in blocks)
         {
-            block.Translate(Vector3.back * speed * Time.deltaTime);
+            Vector3 pos = block.position;
+
+            pos.z -= speed * Time.deltaTime;
+
+            block.position = pos;
         }
 
         // เช็คตัวหน้าสุด
@@ -24,12 +28,18 @@ public class RoadBlockManager : MonoBehaviour
             // เอาตัวหน้าสุดไปไว้หลังสุด
             Transform lastBlock = blocks[blocks.Count - 1];
 
-            Vector3 newPos = lastBlock.position;
-            newPos.z += blockLength;
+            Vector3 newPos = firstBlock.position;
+
+            // ล็อค X,Y เดิม
+            newPos.x = firstBlock.position.x;
+            newPos.y = firstBlock.position.y;
+
+            // เปลี่ยนแค่ Z
+            newPos.z = lastBlock.position.z + blockLength;
 
             firstBlock.position = newPos;
 
-            // สลับลำดับใน list
+            // สลับลำดับใน List
             blocks.RemoveAt(0);
             blocks.Add(firstBlock);
         }

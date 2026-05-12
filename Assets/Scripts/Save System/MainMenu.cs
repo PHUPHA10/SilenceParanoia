@@ -39,7 +39,7 @@ public class MainMenu : MonoBehaviour
 
         if (SceneLoader.Instance != null)
         {
-            SceneLoader.Instance.LoadScene("Taxiscene");
+            SceneLoader.Instance.LoadScene("Maystation");
         }
     }
 

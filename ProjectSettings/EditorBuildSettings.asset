@@ -5,17 +5,17 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Start.unity
-    guid: d0c440cba089bf341ae37af0fa039160
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 939a3a7a6129c2545a465e679528f74f
   - enabled: 1
+    path: Assets/Scenes/Maystation.unity
+    guid: 58a30ed31149d9a4ba22196e52365c46
+  - enabled: 1
     path: Assets/Scenes/Taxiscene.unity
     guid: a9e5a3ff7bed9a049b58c9dd7d7090c5
   - enabled: 1
-    path: Assets/Scenes/Condo Niti.unity
+    path: Assets/Scenes/Niti.unity
     guid: 128868f6deb470c4e819dd7d1abc2d4b
   - enabled: 1
     path: Assets/Scenes/Lastscene.unity
