@@ -11,14 +11,14 @@ public class DrinkSequenceManager : MonoBehaviour
     public VideoPlayer videoPlayer;
 
     public float animationDuration = 10f; // ความยาว animation ดื่มน้ำ
-    public float fadeSpeed = 2f;
 
     [Header("Objects To Disable During Video")]
     public List<GameObject> objectsToDisable;
     public AudioSource gameAudio;
+    public float fadeInSpeed = 1.2f;
 
     [Header("Next Scene")]
-    public string nextSceneName = "MainMenu"; // ใส่ชื่อซีนที่ต้องการโหลด
+    public string nextSceneName = "MainMenu";
 
     public void StartDrinkSequence()
     {
@@ -29,20 +29,33 @@ public class DrinkSequenceManager : MonoBehaviour
     {
         if (gameAudio != null)
             gameAudio.enabled = false;
+
         // ล็อก ESC ตั้งแต่เริ่ม sequence
         PauseMenuManager.IsVideoPlaying = true;
 
+        // รอ animation ดื่มน้ำ
         yield return new WaitForSeconds(animationDuration);
 
-        Color c = fadeImage.color;
+        float alpha = 0f;
 
-        while (c.a < 1f)
+        while (alpha < 1f)
         {
-            c.a += Time.deltaTime * fadeSpeed;
-            fadeImage.color = c;
+            alpha += Time.deltaTime * fadeInSpeed;
+
+            fadeImage.color = new Color(
+                0f,
+                0f,
+                0f,
+                alpha
+            );
+
             yield return null;
         }
+        yield return new WaitForSeconds(3f);
 
+        fadeImage.gameObject.SetActive(false);
+
+        // ปิด object ต่าง ๆ
         foreach (GameObject obj in objectsToDisable)
         {
             if (obj != null)
@@ -52,6 +65,7 @@ public class DrinkSequenceManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        // 🔥 เล่นวิดีโอหลังจอดำแล้ว
         videoPlayer.gameObject.SetActive(true);
         videoPlayer.Play();
 
@@ -63,7 +77,7 @@ public class DrinkSequenceManager : MonoBehaviour
 
         PauseMenuManager.IsVideoPlaying = false;
 
-        // เปลี่ยนซีนทันที
+        // เปลี่ยนซีน
         SceneManager.LoadScene(nextSceneName);
     }
 }

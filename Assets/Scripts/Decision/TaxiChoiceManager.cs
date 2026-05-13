@@ -21,6 +21,7 @@ public class TaxiChoiceManager : MonoBehaviour
     public DrinkSequenceManager drinkSequenceManager;
     public CarLookController carLookController;
     public PlayableDirector timeline;
+    public GameObject SpacebarTexts;
 
     [Header("Cameras")]
     public GameObject playerCamera;
@@ -61,6 +62,8 @@ public class TaxiChoiceManager : MonoBehaviour
         // 🔁 สลับกล้อง
         if (playerCamera != null) playerCamera.SetActive(false);
         if (timelineCamera != null) timelineCamera.SetActive(true);
+
+        SpacebarTexts.SetActive(false);
 
         // ▶️ เล่น Timeline
         timeline.time = 0;
