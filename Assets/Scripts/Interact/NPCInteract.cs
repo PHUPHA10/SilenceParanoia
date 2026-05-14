@@ -1,41 +1,87 @@
+using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class NPCInteract : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string npcName = "แม่บ้าน";
+    [System.Serializable]
+    public class DialogueLine
+    {
+        [TextArea]
+        public string text;
 
+        public Color textColor = Color.white;
+        public float displayDuration = 4f;
+        public float delayAfter = 1f;
+    }
 
-    // กำหนดบทพูด (string ธรรมดา)
-    [TextArea]
-    [SerializeField] private string[] dialogueLines;
+    [Header("NPC")]
+    [SerializeField] private string npcName = "";
 
-    // เลือกว่าจะใช้เวลาเท่ากันทุกบรรทัด หรือกำหนดเวลาต่อบรรทัด
-    [Header("Timing")]
-    [SerializeField] private bool usePerLineDurations = false;
-    [SerializeField] private float secondsPerLine = 3.8f;
-    [SerializeField] private float[] perLineDurations; // ต้องมีขนาดเท่ากับ dialogueLines
+    [Header("UI")]
+    public TMP_Text dialogueText;
+    public GameObject dialoguePanel;
+
+    [Header("Dialogue")]
+    public DialogueLine[] dialogueLines;
+
+    [Header("Disable While Talking")]
+    public GameObject[] objectsToDisable;
+
+    bool isTalking = false;
 
     public string Prompt => $"คุยกับ {npcName}";
 
     public void Interact()
     {
-        if (DialogueManager.Instance == null) return;
+        if (isTalking)
+            return;
 
-        if (usePerLineDurations && perLineDurations != null && perLineDurations.Length == dialogueLines.Length)
-        {
-            // โหมด: เวลาต่อบรรทัด
-            DialogueManager.Instance.StartDialogue(npcName, dialogueLines, perLineDurations);
-        }
-        else
-        {
-            // โหมด: เวลาเท่ากันทุกบรรทัด
-            DialogueManager.Instance.StartDialogue(npcName, dialogueLines, secondsPerLine);
-        }
-        dialogueLines = new string[] {
-            "เป็นไงบ้างจ๊ะหนู   กินข้าวเย็นมารึยัง?",
-            "ระวังตัวด้วยนะจ๊ะ   ช่วงนี้มีแต่ข่าวปล้นชิงทรัพย์เยอะไปหมด",
-            "คอยดูรอบข้างตัวเองไว้ดีๆนะ"
-};
+        StartCoroutine(DialogueSequence());
     }
-    
+
+    IEnumerator DialogueSequence()
+    {
+        if (dialogueLines == null || dialogueLines.Length == 0)
+            yield break;
+
+        isTalking = true;
+
+        foreach (GameObject obj in objectsToDisable)
+        {
+            if (obj != null)
+                obj.SetActive(false);
+        }
+
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(true);
+
+        foreach (var line in dialogueLines)
+        {
+            if (dialogueText != null)
+            {
+                dialogueText.text = line.text;
+                dialogueText.color = line.textColor;
+                dialogueText.gameObject.SetActive(true);
+            }
+
+            yield return new WaitForSeconds(line.displayDuration);
+
+            if (dialogueText != null)
+                dialogueText.gameObject.SetActive(false);
+
+            yield return new WaitForSeconds(line.delayAfter);
+        }
+
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+
+        foreach (GameObject obj in objectsToDisable)
+        {
+            if (obj != null)
+                obj.SetActive(true);
+        }
+
+        isTalking = false;
+    }
 }

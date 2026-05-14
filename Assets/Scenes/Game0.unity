@@ -2370,6 +2370,7 @@ MonoBehaviour:
   qteGames: []
   showDelay: 5
   switchInterval: 15
+  guideController: {fileID: 0}
 --- !u!114 &276579183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8851,13 +8852,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f102929a3d09c0449950d0097325cf0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heartBeatBG: {fileID: 0}
+  pointer: {fileID: 0}
   pointA: {fileID: 1995860205}
   pointB: {fileID: 390312944}
   safeZone: {fileID: 662819979}
-  moveSpeed: 750
-  maxFails: 3
-  inputWindowTime: 3
   failText: {fileID: 0}
+  audioSource: {fileID: 0}
+  successSfx: {fileID: 0}
+  failSfx: {fileID: 0}
+  bgShowDelay: 3
+  pointerShowDelay: 3.4
+  moveSpeed: 750
+  inputWindowTime: 3
+  maxFails: 3
+  objectToShow: {fileID: 0}
 --- !u!1 &1005116582
 GameObject:
   m_ObjectHideFlags: 0
@@ -10320,9 +10329,15 @@ MonoBehaviour:
   drinkWaterPanel: {fileID: 1148933753}
   stopCarPanel: {fileID: 1174027733}
   waterBottleInHand: {fileID: 1537190210}
+  choiceAudioSource: {fileID: 0}
+  choiceLoopSound: {fileID: 0}
   playerAnimator: {fileID: 0}
   drinkSequenceManager: {fileID: 0}
   carLookController: {fileID: 0}
+  timeline: {fileID: 0}
+  SpacebarTexts: {fileID: 0}
+  playerCamera: {fileID: 0}
+  timelineCamera: {fileID: 0}
 --- !u!4 &1118206801
 Transform:
   m_ObjectHideFlags: 0
@@ -10599,9 +10614,9 @@ RectTransform:
   - {fileID: 2025633631}
   m_Father: {fileID: 1032256813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 341.5, y: -50}
   m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1161682698
@@ -12070,6 +12085,8 @@ MonoBehaviour:
   mediumVolume: 0.59
   nearVolume: 0.84
   stepInterval: 1.2
+  gunshotSource: {fileID: 0}
+  gunshotClip: {fileID: 0}
   enemySpawner: {fileID: 0}
   loseVideoClip: {fileID: 0}
 --- !u!114 &1412045642
@@ -12765,7 +12782,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1505894281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13027,8 +13044,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f7484c0005d1e4bb62f37a5bb95067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcName: "\u0E41\u0E21\u0E48\u0E1A\u0E49\u0E32\u0E19"
-  dialogueLines: []
+  npcName: "\u0E1A\u0E38\u0E04\u0E04\u0E25\u0E19\u0E48\u0E32\u0E2A\u0E07\u0E2A\u0E31\u0E22"
+  dialogueLines:
+  - 
   usePerLineDurations: 0
   secondsPerLine: 2.5
   perLineDurations: []
@@ -13141,9 +13159,9 @@ RectTransform:
   - {fileID: 2022587906}
   m_Father: {fileID: 1032256813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 341.5, y: -949.25}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1537190208
