@@ -13,6 +13,9 @@ public class NPCInteract : MonoBehaviour, IInteractable
         public Color textColor = Color.white;
         public float displayDuration = 4f;
         public float delayAfter = 1f;
+
+        [Header("Voice")]
+        public AudioClip voiceClip; // 🔥 เสียงของบรรทัดนี้
     }
 
     [Header("NPC")]
@@ -24,6 +27,9 @@ public class NPCInteract : MonoBehaviour, IInteractable
 
     [Header("Dialogue")]
     public DialogueLine[] dialogueLines;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
 
     [Header("Disable While Talking")]
     public GameObject[] objectsToDisable;
@@ -65,7 +71,21 @@ public class NPCInteract : MonoBehaviour, IInteractable
                 dialogueText.gameObject.SetActive(true);
             }
 
+            //เล่นเสียงเฉพาะตอนข้อความขึ้น
+            if (audioSource != null && line.voiceClip != null)
+            {
+                audioSource.Stop();
+                audioSource.clip = line.voiceClip;
+                audioSource.Play();
+            }
+
             yield return new WaitForSeconds(line.displayDuration);
+
+            //หยุดเสียงตอนข้อความหาย
+            if (audioSource != null)
+            {
+                audioSource.Stop();
+            }
 
             if (dialogueText != null)
                 dialogueText.gameObject.SetActive(false);
