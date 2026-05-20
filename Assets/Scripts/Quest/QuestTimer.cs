@@ -6,8 +6,6 @@ using UnityEngine.Video;
 using UnityEngine.SceneManagement;
 using StarterAssets;
 
-
-
 public class QuestTimer : MonoBehaviour
 {
     [Header("UI")]
@@ -20,7 +18,6 @@ public class QuestTimer : MonoBehaviour
 
     [Header("Flow")]
     public GameObject findQuestGroup;
-
 
     public UnityEvent OnQuestTimeEnd;
 
@@ -40,6 +37,7 @@ public class QuestTimer : MonoBehaviour
     [Header("Knock Timing")]
     public float minKnockDelay = 2.15f;
     public float maxKnockDelay = 4.85f;
+
     [Range(0f, 1f)]
     public float loudKnockChance = 0.35f;
 
@@ -51,9 +49,9 @@ public class QuestTimer : MonoBehaviour
     public Doorquest doorToOpen;
 
     [Header("Fail Video")]
-    public UnityEngine.Video.VideoPlayer failVideo;
+    public VideoClip failVideoClip;
+    public VideoPlayer failVideoPlayer;
     public GameObject[] gameObjectsToDisable;
-
 
     public bool IsQuestRunning => isRunning;
 
@@ -74,6 +72,7 @@ public class QuestTimer : MonoBehaviour
         if (questTextGroup != null)
         {
             questTextGroup.SetActive(true);
+
             foreach (Transform t in questTextGroup.transform)
                 t.gameObject.SetActive(true);
         }
@@ -89,7 +88,6 @@ public class QuestTimer : MonoBehaviour
         {
             knockRoutine = StartCoroutine(KnockLoop());
         }
-
 
         if (enemySpawner != null)
             enemySpawner.SpawnEnemy();
@@ -147,62 +145,92 @@ public class QuestTimer : MonoBehaviour
             DoorAudio.PlayOneShot(kickDoorClip);
         }
 
-        // 🔓 เปิดประตูที่เลือก
         if (doorToOpen != null)
         {
             doorToOpen.OpenDoorByQuest();
         }
 
-        if (failVideo != null)
+        hidingPlace[] hides =
+            FindObjectsOfType<hidingPlace>();
+
+        bool anyPlayerHidden = false;
+
+        foreach (var h in hides)
         {
-            failVideo.gameObject.SetActive(true);
-
-            failVideo.loopPointReached += OnVideoFinished;
-
-            failVideo.Play();
-
-            // 🔒 ปิดการควบคุมกล้อง
-            FirstPersonController controller = FindObjectOfType<FirstPersonController>();
-            if (controller != null)
+            if (h.IsHiding)
             {
-                controller.enabled = false;
+                anyPlayerHidden = true;
+                Debug.Log("PLAYER IS HIDING");
+                break;
             }
-
-            foreach (var go in gameObjectsToDisable)
-                if (go != null && go != failVideo.gameObject)
-                    go.SetActive(false);
         }
-        void OnVideoFinished(VideoPlayer vp)
+        if (anyPlayerHidden)
         {
-            // ป้องกันเรียกซ้ำ
-            vp.loopPointReached -= OnVideoFinished;
-            FirstPersonController controller = FindObjectOfType<FirstPersonController>();
-            if (controller != null)
+            Debug.Log("SKIP FAIL VIDEO");
+        }
+        else
+        {
+            if (failVideoPlayer != null &&
+                failVideoClip != null)
             {
-                controller.enabled = true;
-            }
-            SceneManager.LoadScene("MainMenu");  
+                failVideoPlayer.gameObject.SetActive(true);
 
+                failVideoPlayer.clip = failVideoClip;
+
+                failVideoPlayer.loopPointReached += OnVideoFinished;
+
+                failVideoPlayer.Play();
+
+                FirstPersonController controller =
+                    FindObjectOfType<FirstPersonController>();
+
+                if (controller != null)
+                {
+                    controller.enabled = false;
+                }
+
+                foreach (var go in gameObjectsToDisable)
+                {
+                    if (go != null &&
+                        go != failVideoPlayer.gameObject)
+                    {
+                        go.SetActive(false);
+                    }
+                }
+            }
         }
 
         OnQuestTimeEnd?.Invoke();
-
     }
 
+    void OnVideoFinished(VideoPlayer vp)
+    {
+        vp.loopPointReached -= OnVideoFinished;
 
+        FirstPersonController controller =
+            FindObjectOfType<FirstPersonController>();
+
+        if (controller != null)
+        {
+            controller.enabled = true;
+        }
+
+        SceneManager.LoadScene("MainMenu");
+    }
 
     public void OnPlayerHide()
     {
+
         if (questTextGroup != null)
             questTextGroup.SetActive(false);
 
         if (timerText != null)
             timerText.gameObject.SetActive(true);
-    }
 
+    }
 
     public void OnPlayerExitHide()
     {
-        
+
     }
 }

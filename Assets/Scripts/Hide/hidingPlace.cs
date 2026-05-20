@@ -13,7 +13,7 @@ public class hidingPlace : MonoBehaviour, IInteractable
     public RotateLeftRightLimited hideviews;
 
     [Header("Player Control")]
-    public MonoBehaviour[] componentsToDisable;
+    public GameObject[] gameObjectsToDisable;
 
     [Header("Quest")]
     public QuestTimer questTimer;
@@ -37,7 +37,6 @@ public class hidingPlace : MonoBehaviour, IInteractable
     public float stepInterval = 1.2f;
     private Coroutine footstepRoutine;
 
-    // 🔫 เพิ่มส่วนนี้
     [Header("Gunshot Sound")]
     public AudioSource gunshotSource;
     public AudioClip gunshotClip;
@@ -54,8 +53,10 @@ public class hidingPlace : MonoBehaviour, IInteractable
         get
         {
             if (isHiding) return "";
+
             if (questTimer == null || !questTimer.IsQuestRunning)
                 return "ซ่อน (ปิดเบรกเกอร์ก่อน)";
+
             return "ซ่อน";
         }
     }
@@ -74,7 +75,9 @@ public class hidingPlace : MonoBehaviour, IInteractable
     public void Interact()
     {
         if (isHiding) return;
-        if (questTimer == null || !questTimer.IsQuestRunning) return;
+
+        if (questTimer == null || !questTimer.IsQuestRunning)
+            return;
 
         EnterHide();
     }
@@ -82,6 +85,8 @@ public class hidingPlace : MonoBehaviour, IInteractable
     private void EnterHide()
     {
         isHiding = true;
+        Debug.Log("IS HIDING TRUE");
+
         hideTransform = transform;
 
         if (questTimer != null)
@@ -90,8 +95,11 @@ public class hidingPlace : MonoBehaviour, IInteractable
         if (HidingQTEManager.Instance != null)
             HidingQTEManager.Instance.RegisterHideSpot(this);
 
-        if (playerCamera != null) playerCamera.enabled = false;
-        if (hideCamera != null) hideCamera.enabled = true;
+        if (playerCamera != null)
+            playerCamera.enabled = false;
+
+        if (hideCamera != null)
+            hideCamera.enabled = true;
 
         if (playerModel != null)
             playerModel.SetActive(false);
@@ -99,8 +107,12 @@ public class hidingPlace : MonoBehaviour, IInteractable
         if (hideviews != null)
             hideviews.enabled = true;
 
-        foreach (var c in componentsToDisable)
-            if (c != null) c.enabled = false;
+        // 🔥 ปิด object ที่ลากใส่
+        foreach (GameObject obj in gameObjectsToDisable)
+        {
+            if (obj != null)
+                obj.SetActive(false);
+        }
 
         if (heartbeatSource != null)
         {
@@ -121,7 +133,9 @@ public class hidingPlace : MonoBehaviour, IInteractable
     {
         if (!isHiding) return;
 
-        if (footstepSource != null && footstepClip != null && footstepRoutine == null)
+        if (footstepSource != null &&
+            footstepClip != null &&
+            footstepRoutine == null)
         {
             footstepRoutine = StartCoroutine(FootstepSequence());
         }
@@ -139,17 +153,17 @@ public class hidingPlace : MonoBehaviour, IInteractable
         if (HidingQTEManager.Instance != null)
             HidingQTEManager.Instance.UnregisterHideSpot(this);
 
-        if (hideCamera != null) hideCamera.enabled = false;
-        if (playerCamera != null) playerCamera.enabled = true;
+        if (hideCamera != null)
+            hideCamera.enabled = false;
+
+        if (playerCamera != null)
+            playerCamera.enabled = true;
 
         if (playerModel != null)
             playerModel.SetActive(true);
 
         if (hideviews != null)
             hideviews.enabled = false;
-
-        foreach (var c in componentsToDisable)
-            if (c != null) c.enabled = true;
 
         if (heartbeatSource != null)
             heartbeatSource.Stop();
@@ -187,7 +201,6 @@ public class hidingPlace : MonoBehaviour, IInteractable
 
         while (isHiding)
         {
-            // 🔫 เพิ่มสุ่มเสียงยิง
             if (Random.value < 0.3f)
                 PlayGunshot();
 

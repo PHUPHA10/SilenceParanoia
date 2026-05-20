@@ -200,7 +200,7 @@ public class TaxiDialogueManager : MonoBehaviour
 
         if (SceneLoader.Instance != null)
         {
-            SceneLoader.Instance.LoadScene("Lobby");
+            SceneLoader.Instance.LoadScene("Niti");
         }
         else
         {
