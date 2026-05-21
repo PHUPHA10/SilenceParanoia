@@ -16271,12 +16271,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 308820220}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8817132367905129878, guid: fd935d2c528b91c4cbaab1b5b2416e41, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 664209119}
-    - targetCorrespondingSourceObject: {fileID: 8817132367905129878, guid: fd935d2c528b91c4cbaab1b5b2416e41, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 664209118}
     - targetCorrespondingSourceObject: {fileID: -122828261115192467, guid: fd935d2c528b91c4cbaab1b5b2416e41, type: 3}
       insertIndex: -1
       addedObject: {fileID: 576993311}
@@ -16364,50 +16358,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8817132367905129878, guid: fd935d2c528b91c4cbaab1b5b2416e41, type: 3}
   m_PrefabInstance: {fileID: 664209116}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &664209118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664209117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4908d11e5662a142ba7d176aaf4fd19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemName: 
-  itemData: {fileID: 11400000, guid: c9f903ead4582994fa5f0da803740069, type: 2}
-  amount: 0
---- !u!114 &664209119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664209117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b70181c1094ea2a44b794c6e93ccf131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCamera: {fileID: 7403551024386071759}
-  hideCamera: {fileID: 0}
-  playerModel: {fileID: 1091478755}
-  hideviews: {fileID: 0}
-  gameObjectsToDisable: []
-  questTimer: {fileID: 0}
-  heartbeatSource: {fileID: 0}
-  footstepSource: {fileID: 0}
-  footstepClip: {fileID: 0}
-  farVolume: 0.3
-  mediumVolume: 0.59
-  nearVolume: 0.84
-  stepInterval: 1.2
-  gunshotSource: {fileID: 0}
-  gunshotClip: {fileID: 0}
-  enemySpawner: {fileID: 0}
-  loseVideoClip: {fileID: 0}
 --- !u!4 &664209120 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6301085902483120515, guid: fd935d2c528b91c4cbaab1b5b2416e41, type: 3}
@@ -31839,8 +31789,8 @@ Transform:
   m_GameObject: {fileID: 1394872321}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70887446, z: -0, w: 0.7053348}
-  m_LocalPosition: {x: -0.04, y: 0.503, z: -0.02}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.04, y: 0.652, z: -0.02}
+  m_LocalScale: {x: 1, y: 1.6092, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1559149607}
