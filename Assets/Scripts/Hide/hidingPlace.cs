@@ -1,12 +1,17 @@
-﻿using System.Collections;
+﻿using StarterAssets;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Video;
 
 public class hidingPlace : MonoBehaviour, IInteractable
 {
     [Header("Camera Switching")]
     public Camera playerCamera;
-    public Camera hideCamera;
+
+    [Header("Timeline")]
+    public PlayableDirector[] ShowTimelines;
+
 
     [Header("Player Model")]
     public GameObject playerModel;
@@ -45,8 +50,12 @@ public class hidingPlace : MonoBehaviour, IInteractable
     public EnemySpawnerHide enemySpawner;
     private Transform hideTransform;
 
-    [Header("Lose Video")]
-    public VideoClip loseVideoClip;
+    [Header("Lose Timeline")]
+    public PlayableDirector losetimeline;
+    [SerializeField] VideoClip failVideoClip;
+    [SerializeField] VideoPlayer failVideoPlayer;
+
+    public GameObject HideDialog;
 
     public string Prompt
     {
@@ -65,11 +74,11 @@ public class hidingPlace : MonoBehaviour, IInteractable
     {
         hideWinManager = FindObjectOfType<HideWinManager>();
 
-        if (hideCamera != null)
-            hideCamera.enabled = false;
-
         if (hideviews != null)
             hideviews.enabled = false;
+
+        if (losetimeline != null)
+            losetimeline.enabled = false;
     }
 
     public void Interact()
@@ -91,6 +100,7 @@ public class hidingPlace : MonoBehaviour, IInteractable
 
         if (questTimer != null)
             questTimer.OnPlayerHide();
+        questTimer.enabled = false;
 
         if (HidingQTEManager.Instance != null)
             HidingQTEManager.Instance.RegisterHideSpot(this);
@@ -98,8 +108,20 @@ public class hidingPlace : MonoBehaviour, IInteractable
         if (playerCamera != null)
             playerCamera.enabled = false;
 
-        if (hideCamera != null)
-            hideCamera.enabled = true;
+        foreach (PlayableDirector timeline in ShowTimelines)
+        {
+            if (timeline != null)
+            {
+                timeline.gameObject.SetActive(true);
+                timeline.Play();
+            }
+
+        }
+
+        if (losetimeline != null)
+            losetimeline.gameObject.SetActive(false);
+        if (losetimeline != null)
+            losetimeline.enabled = false;
 
         if (playerModel != null)
             playerModel.SetActive(false);
@@ -128,19 +150,6 @@ public class hidingPlace : MonoBehaviour, IInteractable
         if (hideWinManager != null)
             hideWinManager.OnPlayerEnterHide();
     }
-
-    public void StartFootstepAfterQuest()
-    {
-        if (!isHiding) return;
-
-        if (footstepSource != null &&
-            footstepClip != null &&
-            footstepRoutine == null)
-        {
-            footstepRoutine = StartCoroutine(FootstepSequence());
-        }
-    }
-
     public void ForceExitHide()
     {
         if (!isHiding) return;
@@ -153,14 +162,14 @@ public class hidingPlace : MonoBehaviour, IInteractable
         if (HidingQTEManager.Instance != null)
             HidingQTEManager.Instance.UnregisterHideSpot(this);
 
-        if (hideCamera != null)
-            hideCamera.enabled = false;
+        if (HideDialog != null)
+            HideDialog.SetActive(false);
 
         if (playerCamera != null)
-            playerCamera.enabled = true;
+            playerCamera.enabled = false;
 
         if (playerModel != null)
-            playerModel.SetActive(true);
+            playerModel.SetActive(false);
 
         if (hideviews != null)
             hideviews.enabled = false;
@@ -176,8 +185,14 @@ public class hidingPlace : MonoBehaviour, IInteractable
         if (hideWinManager != null)
             hideWinManager.OnPlayerExitHide();
 
-        FindObjectOfType<LoseManager>()
-            ?.PlayLoseVideo(loseVideoClip);
+        foreach (PlayableDirector timeline in ShowTimelines)
+            if (timeline != null)
+                timeline.gameObject.SetActive(true);
+        if (losetimeline != null)
+        {
+            losetimeline.gameObject.SetActive(true);
+            losetimeline.enabled = true;
+        }
 
         if (footstepRoutine != null)
         {
@@ -192,7 +207,107 @@ public class hidingPlace : MonoBehaviour, IInteractable
         {
             enemySpawner.SpawnEnemyNearPlayer(hideTransform);
         }
+        StartCoroutine(WaitTimelineThenLose());
     }
+    IEnumerator WaitTimelineThenLose()
+    {
+
+        foreach (PlayableDirector timeline in ShowTimelines)
+        {
+            if (timeline != null)
+            {
+                timeline.Stop();
+                timeline.gameObject.SetActive(false);
+            }
+        }
+
+        if (losetimeline != null)
+        {
+            losetimeline.gameObject.SetActive(true);
+            losetimeline.Play();
+        }
+
+        yield return new WaitWhile(() => losetimeline.state == PlayState.Playing);
+
+        if (failVideoPlayer != null && failVideoClip != null)
+        {
+            bool videoFinished = false;
+            if (losetimeline != null)
+            {
+                losetimeline.Stop();
+                losetimeline.enabled = false;
+            }
+            if (playerCamera == null)
+            {
+                playerCamera = Camera.main;
+            }
+
+            if (playerCamera != null)
+            {
+                playerCamera.enabled = true;
+                playerCamera.gameObject.SetActive(true);
+            }
+
+            if (playerModel != null)
+            {
+                playerModel.SetActive(true);
+            }
+
+            PhoneChat.UnlockPhone();
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            FirstPersonController controller =
+                   FindObjectOfType<FirstPersonController>();
+
+            if (controller != null)
+            {
+                controller.enabled = false;
+            }
+
+            failVideoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
+            failVideoPlayer.targetCamera = playerCamera;
+
+            failVideoPlayer.gameObject.SetActive(true);
+            failVideoPlayer.clip = failVideoClip;
+
+            failVideoPlayer.loopPointReached += _ => videoFinished = true;
+            failVideoPlayer.Play();
+
+            if (hideWinManager != null)
+                hideWinManager.OnPlayerExitHide();
+
+            foreach (var go in gameObjectsToDisable)
+            {
+                if (go != null && go != failVideoPlayer.gameObject && go != playerCamera.gameObject)
+                    go.SetActive(false);
+            }
+            yield return new WaitUntil(() => videoFinished);
+            failVideoPlayer.gameObject.SetActive(false);
+
+        }
+        FindObjectOfType<LoseManager>()?.PlayLoseVideo(failVideoClip);
+        {
+            Debug.Log("หาแล้ว");
+        }
+
+
+    }
+
+    public void StartFootstepAfterQuest()
+    {
+        if (!isHiding) return;
+
+        if (footstepSource != null &&
+            footstepClip != null &&
+            footstepRoutine == null)
+        {
+            footstepRoutine = StartCoroutine(FootstepSequence());
+        }
+    }
+
+
 
     IEnumerator FootstepSequence()
     {

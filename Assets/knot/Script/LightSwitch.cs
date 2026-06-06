@@ -14,7 +14,7 @@ public class LightSwitch : MonoBehaviour
     [Header("Raycast Settings")]
     public float interactDistance = 1f;
     public KeyCode toggleKey = KeyCode.E;
-    
+
 
     [Header("UI Hint (optional)")]
     public GameObject interactHint;
@@ -41,13 +41,14 @@ public class LightSwitch : MonoBehaviour
         CheckRaycast();
 
         if (isLookingAtThis && Input.GetKeyDown(toggleKey))
-         {
-           Toggle();
-         }
+        {
+            Toggle();
+            Debug.Log("ติด");
+        }
     }
-    
-    
-   
+
+
+
     void CheckRaycast()
     {
         if (playerCamera == null) return;
@@ -78,15 +79,15 @@ public class LightSwitch : MonoBehaviour
             outline?.Outline(false);
             outline = default;
         }
-        
+
         if (Physics.Raycast(ray, out hit, interactDistance))
-        {   
+        {
             if (hit.collider.gameObject == this.gameObject)
             {
 
                 isLookingAtThis = true;
-               
-                    if (interactHint != null)
+
+                if (interactHint != null)
                     interactHint.SetActive(true);
             }
 
@@ -102,16 +103,16 @@ public class LightSwitch : MonoBehaviour
     }
 
     void ClearLook()
-    { 
+    {
         isLookingAtThis = false;
-      
+
 
         if (interactHint != null)
             interactHint.SetActive(false);
     }
-        
 
-    
+
+
     public void Toggle()
     {
         isOn = !isOn;
@@ -126,7 +127,7 @@ public class LightSwitch : MonoBehaviour
                 light.enabled = isOn;
         }
     }
-    
+
     void OnDrawGizmosSelected()
     {
         if (playerCamera == null) return;

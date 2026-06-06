@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
+using UnityEngine.Playables;
+using StarterAssets;
 
 public class HideWinManager : MonoBehaviour
 {
@@ -61,6 +63,7 @@ public class HideWinManager : MonoBehaviour
 
     Camera GetActiveCamera()
     {
+        
         Camera[] cams = Camera.allCameras;
         foreach (var cam in cams)
         {
@@ -77,7 +80,7 @@ public class HideWinManager : MonoBehaviour
 
         hasWon = true;
         isHiding = false;
-
+        
         // รีเซ็ต QTE (ของเดิม)
         if (HidingQTEManager.Instance != null)
             HidingQTEManager.Instance.ForceStopQTE();
@@ -85,6 +88,7 @@ public class HideWinManager : MonoBehaviour
         // 🔥 ตรงนี้คือหัวใจ
         if (winVideo.renderMode == VideoRenderMode.CameraNearPlane)
         {
+
             winVideo.targetCamera = GetActiveCamera();
         }
 
@@ -99,17 +103,21 @@ public class HideWinManager : MonoBehaviour
             winVideo.gameObject.SetActive(true);
             winVideo.Play();
         }
+            
     }
 
 
 
     void OnVideoEnd(VideoPlayer vp)
     {
+        
         PlayerPrefs.SetInt("GameCompleted", 1);
         PlayerPrefs.Save();
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+
 
         if (videoAudio != null)
             videoAudio.Stop();

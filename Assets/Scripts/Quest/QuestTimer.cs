@@ -224,6 +224,15 @@ public class QuestTimer : MonoBehaviour
         if (questTextGroup != null)
             questTextGroup.SetActive(false);
 
+        if (questAudio != null)
+            questAudio.Stop();
+
+        if (knockRoutine != null)
+        {
+            StopCoroutine(knockRoutine);
+            knockRoutine = null;
+        }
+
         if (timerText != null)
             timerText.gameObject.SetActive(true);
 

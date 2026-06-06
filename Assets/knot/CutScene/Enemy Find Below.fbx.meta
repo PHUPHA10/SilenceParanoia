@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b8c6869872852fc4e9a146e7eb4e7b00
+guid: 341f181a1a6288a49bbfb386fb7428f5
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Sign.001
-    second: {fileID: 2100000, guid: 519b3dea460e7a94e9551f11cbd49a0c, type: 2}
+      name: EyeSlashMEn
+    second: {fileID: 2100000, guid: 17537fdb3807882409bee8d128f26f73, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Eyebrown Men
+    second: {fileID: 2100000, guid: 92c7b899740b3b243a8e82e91633a611, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hair Men.001
+    second: {fileID: 2100000, guid: a91e7ea0e8978184b9de2316ac7a3147, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: iglsh.005
+    second: {fileID: 4898929931111795559, guid: 0cafadcbe4d0dc9428b2c56603decf2d, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -38,7 +53,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.19
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -93,7 +108,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.19
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
@@ -102,7 +117,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
