@@ -9,6 +9,7 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject chatCanvas;
     public MonoBehaviour playerController;
     public MonoBehaviour mouseLook;
+    PhoneChat phone;
 
     [Header("Canvases To Disable When Paused")]
     public List<GameObject> canvasesToDisable;
@@ -20,6 +21,7 @@ public class PauseMenuManager : MonoBehaviour
     void Start()
     {
         LockCursor();
+        PhoneChat phone = FindObjectOfType<PhoneChat>();
     }
 
     void Update()
@@ -30,7 +32,6 @@ public class PauseMenuManager : MonoBehaviour
         {
             if (PhoneChat.IsChatOpen)
             {
-                PhoneChat phone = FindObjectOfType<PhoneChat>();
                 if (phone != null)
                     phone.CloseChat();
                 return;
@@ -45,6 +46,7 @@ public class PauseMenuManager : MonoBehaviour
 
     public void PauseGame()
     {
+
         foreach (GameObject canvas in canvasesToDisable)
             canvas.SetActive(false);
 

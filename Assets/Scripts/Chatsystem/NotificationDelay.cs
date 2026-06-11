@@ -88,7 +88,7 @@ public class NotificationDelay : MonoBehaviour
         }
 
         // กด M = ถือว่า "กดแจ้งเตือน"
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             OnNotificationClicked();
         }

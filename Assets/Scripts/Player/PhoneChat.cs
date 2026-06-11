@@ -16,6 +16,7 @@ public class PhoneChat : MonoBehaviour
     FlashlightController flashlightController;
     HotbarInput hotBar;
     FirstPersonController firstPersonController;
+    PauseMenuManager pausemangaer;
 
     [Header("Footstep Audio")]
     public AudioSource footstepAudio;
@@ -27,6 +28,7 @@ public class PhoneChat : MonoBehaviour
 
         IsChatOpen = false;
 
+        pausemangaer = FindAnyObjectByType<PauseMenuManager>();
         playerInteract = FindObjectOfType<PlayerInteract>();
         cateyeDoor = FindObjectOfType<CateyeDoor>();
         flashlightController = FindObjectOfType<FlashlightController>();
@@ -53,7 +55,7 @@ public class PhoneChat : MonoBehaviour
             return;
 
         // เปิด / ปิด Chat ด้วย M
-        if (Keyboard.current.mKey.wasPressedThisFrame)
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
             if (IsChatOpen && ChatInputFocus.IsAnyInputFocused)
                 return;
@@ -71,6 +73,7 @@ public class PhoneChat : MonoBehaviour
         if (Keyboard.current.escapeKey.wasPressedThisFrame && IsChatOpen)
         {
             CloseChat();
+
         }
     }
     void OpenChat()
@@ -102,6 +105,9 @@ public class PhoneChat : MonoBehaviour
     public void CloseChat()
     {
         IsChatOpen = false;
+
+        if (PauseMenuManager.IsPaused)
+            return;
 
         if (phoneChatRoot != null)
             phoneChatRoot.SetActive(false);
